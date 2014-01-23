@@ -13,7 +13,6 @@ public class PhysicsSprite extends Drawable implements Updateable {
 	private Fixture mFixture;
 
 	public PhysicsSprite(SpriteDrawable sd, Body body, Fixture fixture) {
-		super(sd.priority());
 		mDrawable = sd;
 		mBody = body;
 		mFixture = fixture;

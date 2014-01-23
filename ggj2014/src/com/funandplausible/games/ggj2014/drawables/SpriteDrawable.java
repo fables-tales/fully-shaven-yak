@@ -6,9 +6,10 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 public class SpriteDrawable extends Drawable {
 	
 	private Sprite mSprite;
+	private int mPriority;
 	
 	public SpriteDrawable(Sprite s, int priority) {
-		super(priority);
+		mPriority = priority;
 		mSprite = s;
 	}
 
@@ -19,6 +20,11 @@ public class SpriteDrawable extends Drawable {
 
 	public void setPosition(float x, float y) {
 		mSprite.setPosition(x, y);
+	}
+
+	@Override
+	public int priority() {
+		return mPriority;
 	}
 
 }
