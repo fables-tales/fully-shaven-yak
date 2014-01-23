@@ -4,5 +4,5 @@
 	<inherits name='com.badlogic.gdx.backends.gdx_backends_gwt' />
 	<inherits name='GameRoot' />
 	<entry-point class='com.funandplausible.games.ggj2014.client.GwtLauncher' />
-	<set-configuration-property name="gdx.assetpath" value="../ggj2014-android/assets" />
+	<set-configuration-property name="gdx.assetpath" value="../ggj2014-desktop/assets" />
 </module>
