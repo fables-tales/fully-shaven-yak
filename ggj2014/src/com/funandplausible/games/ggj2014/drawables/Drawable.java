@@ -8,7 +8,7 @@ public abstract class Drawable implements Comparable<Drawable> {
 
 	@Override
 	public int compareTo(Drawable o) {
-		return o.priority() - priority();
+		return priority() - o.priority();
 	}
 }
 

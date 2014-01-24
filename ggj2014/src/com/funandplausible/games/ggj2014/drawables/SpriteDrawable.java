@@ -12,6 +12,14 @@ public class SpriteDrawable extends Drawable {
 		mPriority = priority;
 		mSprite = s;
 	}
+	
+	public float getWidth() {
+		return mSprite.getWidth();
+	}
+	
+	public float getHeight() {
+		return mSprite.getHeight();
+	}
 
 	@Override
 	public void draw(SpriteBatch sb) {

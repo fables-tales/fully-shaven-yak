@@ -1,5 +1,7 @@
 package com.funandplausible.games.ggj2014;
 
+import java.util.Random;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -13,8 +15,10 @@ public class GameServices {
 	private ContentManager mContentManager = null;
 	private World mWorld = null;
 	private ConstantManager mConstantManager = null;
+	private InputManager mInputManager;
+	private Random mRandom;
 	
-	public static final Vector2 GRAVITY_VECTOR = new Vector2(0.0f, 0.1f);
+	public static final Vector2 GRAVITY_VECTOR = new Vector2(0.0f, 0.0f);
 	public static final int PIXELS_PER_METER = 32;
 
 	public GameServices() {
@@ -23,6 +27,12 @@ public class GameServices {
 		mContentManager = makeContentManager();
 		mConstantManager = makeConstantManager();
 		mWorld = makeWorld();
+		mInputManager = makeInputManager();
+		mRandom = makeRandom();
+	}
+
+	public Random random() {
+		return mRandom;
 	}
 	
 	public World world() {
@@ -51,6 +61,11 @@ public class GameServices {
 	public float screenHeight() {
 		return Gdx.graphics.getHeight();
 	}
+
+	public InputManager inputManager() {
+		return mInputManager;
+	}
+
 	
 	private Camera makeCamera() {
 		return new OrthographicCamera(screenWidth(), screenHeight());
@@ -71,5 +86,12 @@ public class GameServices {
 	private ConstantManager makeConstantManager() {
 		return new ConstantManager(Gdx.files.internal("constants.txt"));
 	}
-
+	
+	private InputManager makeInputManager() {
+		return new InputManager();
+	}
+	
+	private Random makeRandom() {
+		return new Random();
+	}
 }

@@ -1,24 +1,25 @@
 package com.funandplausible.games.ggj2014;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
-import java.util.SortedSet;
-import java.util.TreeSet;
 
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.GL10;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Matrix4;
-import com.badlogic.gdx.physics.box2d.Body;
-import com.badlogic.gdx.physics.box2d.BodyDef;
-import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
-import com.badlogic.gdx.physics.box2d.CircleShape;
-import com.badlogic.gdx.physics.box2d.Fixture;
-import com.badlogic.gdx.physics.box2d.FixtureDef;
+import com.badlogic.gdx.physics.box2d.Contact;
+import com.badlogic.gdx.physics.box2d.ContactImpulse;
+import com.badlogic.gdx.physics.box2d.ContactListener;
+import com.badlogic.gdx.physics.box2d.Manifold;
 import com.funandplausible.games.ggj2014.drawables.Drawable;
+import com.funandplausible.games.ggj2014.drawables.Hat;
 import com.funandplausible.games.ggj2014.drawables.SpriteDrawable;
 
 public class GameRoot implements ApplicationListener {
@@ -30,17 +31,31 @@ public class GameRoot implements ApplicationListener {
 		return sServices;
 	}
 
-	private SortedSet<Drawable> mDrawables = new TreeSet<Drawable>();
-	private Set<Updateable> mUpdateables = new HashSet<Updateable>();
-	private int mState = STATE_MAIN;
+	private List<Drawable> mDrawables;
+	private Set<Updateable> mUpdateables; 
+	private int mState;
 	private Box2DDebugRenderer mDebugRenderer;
+	private PlayerEntity mPlayer;
 
 	@Override
 	public void create() {		
 		GameRoot.sServices = new GameServices();
+		mDrawables = new ArrayList<Drawable>();
+		mUpdateables = new HashSet<Updateable>();
+		mState = STATE_MAIN;
 
-		createPhysicsWorld();
+		createPlayer();
+		createBackground();
+		createHats();
+		createListener();
+
 		mDebugRenderer = new Box2DDebugRenderer();
+	}
+
+	private void createPlayer() {
+		mPlayer = new PlayerEntity();
+		mDrawables.add(mPlayer);
+		mUpdateables.add(mPlayer);
 	}
 
 	@Override
@@ -58,11 +73,18 @@ public class GameRoot implements ApplicationListener {
 	}
 
 	private void updateMain() {
+		Vector2 oldPlayerPosition = new Vector2(mPlayer.position());
 		services().world().step((float) (60/1000.0), 3, 3);
 
 		for (Updateable u : mUpdateables) {
 			u.update();
 		}
+		
+		Vector2 playerPosition = mPlayer.position();
+		
+		camera().translate(playerPosition.x-oldPlayerPosition.x, playerPosition.y-oldPlayerPosition.y, 0);
+		camera().update();
+		
 	}
 
 	private void clear() {
@@ -73,6 +95,7 @@ public class GameRoot implements ApplicationListener {
 	private void drawMain() {
 		mainSpriteBatch().setProjectionMatrix(cameraMatrix());
 		mainSpriteBatch().begin();
+		Collections.sort(mDrawables);
 		for (Drawable d : mDrawables) {
 			d.draw(mainSpriteBatch());
 		}
@@ -101,43 +124,35 @@ public class GameRoot implements ApplicationListener {
 	private SpriteBatch mainSpriteBatch() {
 		return services().mainSpriteBatch();
 	}
+	
+	private Camera camera() {
+		return services().camera();
+	}
 
 	private Matrix4 cameraMatrix() {
 		return services().camera().combined;
 	}
 
-	private ContentManager contentManager() {
-		return services().contentManager();
+	private void createBackground() {
+		SpriteDrawable sd = new SpriteDrawable(services().contentManager().loadSprite("bees.png"), -1000);
+		mDrawables.add(sd);
 	}
 
-	private void createPhysicsWorld() {
-		//Define a body for the ball
-		Body ballBody;
+	private void createHats() {
+		HatDistributor hd = new HatDistributor();
+		HatGenerator hg = new HatGenerator();
+		for (Hat h : hd.distributeHats(hg.generateHats(constants().getInt("initial_hats")))) {
+			mDrawables.add(h);
+			mUpdateables.add(h);
+		}
+	}
 
-		//Fixture for the ball
-		Fixture ballFixture;
-		BodyDef ballBodyDef = new BodyDef();
-		ballBodyDef.type = BodyType.DynamicBody;
-		ballBodyDef.position.set(100/GameServices.PIXELS_PER_METER, 100/GameServices.PIXELS_PER_METER);
+	private ConstantManager constants() {
+		return GameRoot.services().constantManager();
+	}
 
-		//Define a shape for the ball
-		CircleShape ballShape = new CircleShape();
-		ballShape.setRadius(100/GameServices.PIXELS_PER_METER/2);
-
-		//Define a fixture for the ball
-		FixtureDef ballFixtureDef = new FixtureDef();
-		ballFixtureDef.shape = ballShape;
-		ballFixtureDef.density = 1;
-
-		//Create a ball
-		ballBody = services().world().createBody(ballBodyDef);
-		ballFixture = ballBody.createFixture(ballFixtureDef);
-		Sprite s = contentManager().loadSprite("bees.png");
-		s.setBounds(0, 0, 100, 100);
-		SpriteDrawable sd = new SpriteDrawable(s, 0);
-		PhysicsSprite ps = new PhysicsSprite(sd, ballBody, ballFixture);
-		mUpdateables.add(ps);
-		mDrawables.add(ps);
+	private void createListener() {
+		new CollisionHandler();
 	}
 
 }
