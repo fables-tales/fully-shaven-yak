@@ -28,9 +28,7 @@ public class Hat extends Drawable implements Updateable {
 		ballBodyDef.type = BodyType.StaticBody;
 		//Define a shape for the ball
 		PolygonShape ps = new PolygonShape();
-		System.out.println("-----");
 		ps.setAsBox(5.0f/GameServices.PIXELS_PER_METER, 5.0f/GameServices.PIXELS_PER_METER);
-		System.out.println("-----");
 
 		//Define a fixture for the ball
 		FixtureDef ballFixtureDef = new FixtureDef();
