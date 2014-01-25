@@ -116,18 +116,25 @@ public class EnemyEntity extends Drawable implements Updateable, HatInteractor,
         }
 
         Vector2 vel = mSprite.body().getLinearVelocity();
-
-        if (vel.x < 0) {
-            mAnim = "walk_left_bad";
-        } else if (vel.x > 0) {
-            mAnim = "walk_right_bad";
+        
+        if (Math.abs(vel.x) < Math.abs(vel.y)) {
+        	if (vel.y < 0) {
+        		mAnim = "walk_down_bad";
+        	} else if (vel.y > 0) {
+        		mAnim = "walk_up_bad";
+        	} else {
+        		mAnim = "walk_down_bad";
+        	}
+        } else {
+        	if (vel.x < 0) {
+        		mAnim = "walk_left_bad";
+        	} else if (vel.x > 0) {
+        		mAnim = "walk_right_bad";
+        	} else {
+        		mAnim = "walk_left_bad";
+        	}
         }
 
-        if (vel.y < 0) {
-            mAnim = "walk_down_bad";
-        } else if (vel.y > 0) {
-            mAnim = "walk_up_bad";
-        }
 
         mAnimationManager.startAnimation(mAnim);
 
