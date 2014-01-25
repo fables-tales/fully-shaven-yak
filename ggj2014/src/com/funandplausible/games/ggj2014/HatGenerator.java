@@ -71,17 +71,17 @@ public class HatGenerator {
     
     private void seedHats() {
     	float smallestProbability = 1000000;
-    	for (String s : HAT_COLORS) {
-    		for (int i : HAT_INDICES) {
-    			mHatPool.put(key(s, i), new ArrayList<Hat>());
-    			float hatProbability = mServices.constantManager().getFloat(key(s,i) + "_hat_probability");
-    			mHatProbabilities.put(
-    					key(s, i), 
-    					mServices.constantManager().getFloat(key(s,i) + "_hat_probability")
-    			);
-    			if (hatProbability < smallestProbability) {
-    				smallestProbability = hatProbability;
-    			}
+    	for (int k = 0; k < HAT_INDICES.length; k++) {
+    		String s = HAT_COLORS[k];
+    		int i = HAT_INDICES[k];
+    		mHatPool.put(key(s, i), new ArrayList<Hat>());
+    		float hatProbability = mServices.constantManager().getFloat(key(s,i) + "_hat_probability");
+    		mHatProbabilities.put(
+    				key(s, i), 
+    				mServices.constantManager().getFloat(key(s,i) + "_hat_probability")
+    				);
+    		if (hatProbability < smallestProbability) {
+    			smallestProbability = hatProbability;
     		}
     	}
     	
@@ -127,7 +127,7 @@ public class HatGenerator {
 	private Sprite hatSprite(int spriteIndex) {
         Sprite s = mServices.contentManager().loadSprite(
                 "hat" + spriteIndex + ".png");
-        s.setBounds(0, 0, 30, 30);
+        s.setBounds(0, 0, 60, 60);
         return s;
     }
 
