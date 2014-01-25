@@ -17,146 +17,148 @@ import com.funandplausible.games.ggj2014.drawables.Hat;
 import com.funandplausible.games.ggj2014.drawables.SpriteDrawable;
 
 public class EnemyEntity extends Drawable implements Updateable, HatInteractor {
-	
-	private float mX;
-	private float mY;
-	private float mVelocityX;
-	private PhysicsSprite mSprite;
-	private Stack<Hat> mHats;
-	private boolean mDead = false;
-	private Sprite mGDXSprite;
-	private HatInteractor mPlayer;
 
-	public EnemyEntity(float initialX, float initialY, float initialVelocityX,
-			float bounds, List<Hat> hats, HatInteractor player) {
-		mX = initialX;
-		mY = initialY;
-		mVelocityX = initialVelocityX;
-		mHats = new Stack<Hat>();
-		mHats.addAll(hats);
-		mPlayer = player;
-		setupPhysicsSprite();
-	}
+    private final float mX;
+    private final float mY;
+    private final float mVelocityX;
+    private PhysicsSprite mSprite;
+    private final Stack<Hat> mHats;
+    private boolean mDead = false;
+    private Sprite mGDXSprite;
+    private final HatInteractor mPlayer;
 
-	private void setupPhysicsSprite() {
-		//Define a body for the ball
-		Body ballBody;
+    public EnemyEntity(float initialX, float initialY, float initialVelocityX,
+            float bounds, List<Hat> hats, HatInteractor player) {
+        mX = initialX;
+        mY = initialY;
+        mVelocityX = initialVelocityX;
+        mHats = new Stack<Hat>();
+        mHats.addAll(hats);
+        mPlayer = player;
+        setupPhysicsSprite();
+    }
 
-		//Fixture for the ball
-		Fixture ballFixture;
-		BodyDef ballBodyDef = new BodyDef();
-		ballBodyDef.type = BodyType.DynamicBody;
-		ballBodyDef.position.set(mX/GameServices.PIXELS_PER_METER, mY/GameServices.PIXELS_PER_METER);
-		ballBodyDef.fixedRotation = true;
+    private void setupPhysicsSprite() {
+        // Define a body for the ball
+        Body ballBody;
 
-		//Define a shape for the ball
-		PolygonShape ps = new PolygonShape();
-		ps.setAsBox(50/GameServices.PIXELS_PER_METER, 50/GameServices.PIXELS_PER_METER);
+        // Fixture for the ball
+        Fixture ballFixture;
+        BodyDef ballBodyDef = new BodyDef();
+        ballBodyDef.type = BodyType.DynamicBody;
+        ballBodyDef.position.set(mX / GameServices.PIXELS_PER_METER, mY
+                / GameServices.PIXELS_PER_METER);
+        ballBodyDef.fixedRotation = true;
 
-		//Define a fixture for the ball
-		FixtureDef ballFixtureDef = new FixtureDef();
-		ballFixtureDef.shape = ps;
-		ballFixtureDef.density = 1;
+        // Define a shape for the ball
+        PolygonShape ps = new PolygonShape();
+        ps.setAsBox(50 / GameServices.PIXELS_PER_METER,
+                50 / GameServices.PIXELS_PER_METER);
 
-		//Create a ball
-		ballBody = GameRoot.services().world().createBody(ballBodyDef);
-		ballFixture = ballBody.createFixture(ballFixtureDef);
-		ballFixture.setSensor(true);
-		ballFixture.setUserData(this);
-		ballBody.setUserData(this);
-		
-		Sprite s = GameRoot.services().contentManager().loadSprite("bees.png");
-		s.setBounds(0, 0, 75, 75);
-		s.setColor(1.0f, 0.0f, 1.0f, 1.0f);
-		SpriteDrawable sd = new SpriteDrawable(s, 200);
-		mSprite = new PhysicsSprite(sd, ballBody, ballFixture);
-		mGDXSprite = s;
-	}
+        // Define a fixture for the ball
+        FixtureDef ballFixtureDef = new FixtureDef();
+        ballFixtureDef.shape = ps;
+        ballFixtureDef.density = 1;
 
-	@Override
-	public void update() {
-		int i = 0;
-		for (Hat h : mHats) {
-			i++;
-			h.setPosition(centerX(), centerY()+50+i*15);
-		}
-		mSprite.setVelocity(mVelocityX, 0);
-		mSprite.update();
-	}
+        // Create a ball
+        ballBody = GameRoot.services().world().createBody(ballBodyDef);
+        ballFixture = ballBody.createFixture(ballFixtureDef);
+        ballFixture.setSensor(true);
+        ballFixture.setUserData(this);
+        ballBody.setUserData(this);
 
-	private float centerX() {
-		return mSprite.position().x;
-	}
+        Sprite s = GameRoot.services().contentManager().loadSprite("bees.png");
+        s.setBounds(0, 0, 75, 75);
+        s.setColor(1.0f, 0.0f, 1.0f, 1.0f);
+        SpriteDrawable sd = new SpriteDrawable(s, 200);
+        mSprite = new PhysicsSprite(sd, ballBody, ballFixture);
+        mGDXSprite = s;
+    }
 
-	private float centerY() {
-		return mSprite.position().y;
-	}
+    @Override
+    public void update() {
+        int i = 0;
+        for (Hat h : mHats) {
+            i++;
+            h.setPosition(centerX(), centerY() + 50 + i * 15);
+        }
+        mSprite.setVelocity(mVelocityX, 0);
+        mSprite.update();
+    }
 
-	@Override
-	public int priority() {
-		return mSprite.priority();
-	}
+    private float centerX() {
+        return mSprite.position().x;
+    }
 
-	@Override
-	public void draw(SpriteBatch sb) {
-		mGDXSprite.setColor(playerHatDeltaColor());
-		mSprite.draw(sb);
-	}
-	
-	private Color playerHatDeltaColor() {
-		if (hatCount() < mPlayer.hatCount()) {
-			return Color.WHITE;
-		} else {
-			float whiteStop = 0;
-			float redStop = 10;
+    private float centerY() {
+        return mSprite.position().y;
+    }
 
-			float delta = hatCount() - mPlayer.hatCount();
-			float alongness = delta / (redStop - whiteStop);
-			float r = 1.0f;
-			float g = 1.0f-alongness;
-			float b = 1.0f-alongness;
-			return new Color(r, g, b, 1.0f);
-		}
-	}
+    @Override
+    public int priority() {
+        return mSprite.priority();
+    }
 
-	private int playerHatCount() {
-		return mPlayer.hatCount();
-	}
+    @Override
+    public void draw(SpriteBatch sb) {
+        mGDXSprite.setColor(playerHatDeltaColor());
+        mSprite.draw(sb);
+    }
 
-	@Override
-	public int hatCount() {
-		return mHats.size();
-	}
+    private Color playerHatDeltaColor() {
+        if (hatCount() < mPlayer.hatCount()) {
+            return Color.WHITE;
+        } else {
+            float whiteStop = 0;
+            float redStop = 10;
 
-	@Override
-	public void loseInteraction(HatInteractor other) {
-		if (mHats.empty()) {
-			die();
-		}
-	}
+            float delta = hatCount() - mPlayer.hatCount();
+            float alongness = delta / (redStop - whiteStop);
+            float r = 1.0f;
+            float g = 1.0f - alongness;
+            float b = 1.0f - alongness;
+            return new Color(r, g, b, 1.0f);
+        }
+    }
 
-	private void die() {
-		mDead = true;
-	}
-	
-	public boolean dead() {
-		return mDead;
-	}
+    public int playerHatCount() {
+        return mPlayer.hatCount();
+    }
 
-	@Override
-	public void winInteraction(HatInteractor other) {
-		if (other.hatCount() > 0) {
-			mHats.push(other.getHats().pop());
-		}
-	}
+    @Override
+    public int hatCount() {
+        return mHats.size();
+    }
 
-	@Override
-	public Stack<Hat> getHats() {
-		return mHats;
-	}
+    @Override
+    public void loseInteraction(HatInteractor other) {
+        if (mHats.empty()) {
+            die();
+        }
+    }
 
-	public Body body() {
-		return mSprite.body();
-	}
+    private void die() {
+        mDead = true;
+    }
+
+    public boolean dead() {
+        return mDead;
+    }
+
+    @Override
+    public void winInteraction(HatInteractor other) {
+        if (other.hatCount() > 0) {
+            mHats.push(other.getHats().pop());
+        }
+    }
+
+    @Override
+    public Stack<Hat> getHats() {
+        return mHats;
+    }
+
+    public Body body() {
+        return mSprite.body();
+    }
 
 }
