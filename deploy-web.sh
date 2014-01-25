@@ -1,3 +1,4 @@
 #!/bin/bash
-exec rsync --verbose --recursive --delete ggj2014-html/war hatamari:/var/www/hatamari.funandplausible.com/
+cd ggj2014-html/war
+exec rsync --verbose --recursive --delete . hatamari:/var/www/hatamari.funandplausible.com/
 
