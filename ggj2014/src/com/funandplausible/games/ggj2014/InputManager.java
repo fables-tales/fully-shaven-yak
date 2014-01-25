@@ -7,6 +7,7 @@ import com.badlogic.gdx.math.Vector2;
 public class InputManager {
 
     public Vector2 inputVector() {
+        // TODO: investigate the divide-by-zero case here
         return new Vector2(computeXInput(), computeYInput()).nor();
     }
 

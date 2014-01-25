@@ -1,6 +1,7 @@
 package com.funandplausible.games.ggj2014;
 
 import java.util.List;
+import java.util.Random;
 import java.util.Stack;
 
 import com.badlogic.gdx.graphics.Color;
@@ -17,28 +18,29 @@ import com.funandplausible.games.ggj2014.drawables.Hat;
 import com.funandplausible.games.ggj2014.drawables.SpriteDrawable;
 
 public class EnemyEntity extends Drawable implements Updateable, HatInteractor {
-
-    private final float mX;
-    private final float mY;
-    private final float mVelocityX;
     private PhysicsSprite mSprite;
     private final Stack<Hat> mHats;
     private boolean mDead = false;
     private Sprite mGDXSprite;
     private final HatInteractor mPlayer;
+    private float mTargetX, mTargetY;
+    private int mWaitTicks = 0;
+	private final float mBound;
 
-    public EnemyEntity(float initialX, float initialY, float initialVelocityX,
-            float bounds, List<Hat> hats, HatInteractor player) {
-        mX = initialX;
-        mY = initialY;
-        mVelocityX = initialVelocityX;
+    public EnemyEntity(float initialX, float initialY, float bounds,
+            List<Hat> hats, HatInteractor player) {
         mHats = new Stack<Hat>();
         mHats.addAll(hats);
         mPlayer = player;
-        setupPhysicsSprite();
+        setupPhysicsSprite(initialX, initialY);
+        mTargetX = initialX;
+        mTargetY = initialY;
+        mBound = bounds;
+        
+        pickNewTarget();
     }
 
-    private void setupPhysicsSprite() {
+    private void setupPhysicsSprite(float x, float y) {
         // Define a body for the ball
         Body ballBody;
 
@@ -46,7 +48,7 @@ public class EnemyEntity extends Drawable implements Updateable, HatInteractor {
         Fixture ballFixture;
         BodyDef ballBodyDef = new BodyDef();
         ballBodyDef.type = BodyType.DynamicBody;
-        ballBodyDef.position.set(mX / GameServices.PIXELS_PER_METER, mY
+        ballBodyDef.position.set(x / GameServices.PIXELS_PER_METER, y
                 / GameServices.PIXELS_PER_METER);
         ballBodyDef.fixedRotation = true;
 
@@ -82,11 +84,33 @@ public class EnemyEntity extends Drawable implements Updateable, HatInteractor {
             i++;
             h.setPosition(centerX(), centerY() + 50 + i * 15);
         }
-        mSprite.setVelocity(mVelocityX, 0);
+        if (mWaitTicks > 0) {
+        	if (mWaitTicks == 1) {
+        		pickNewTarget();
+        	}
+        	mSprite.setVelocity(0, 0);
+        	--mWaitTicks;
+        } else {
+        	final float speed = 20.0f;
+        	float dx = mTargetX - centerX();
+        	float dy = mTargetY - centerY();
+        	float size = (float) Math.hypot(dx, dy);
+        	if (size < 2.0f) {
+        		mWaitTicks = 90;
+        	} else {
+        		mSprite.setVelocity(speed*dx / size, speed*dy / size);
+        	}
+        }
         mSprite.update();
     }
 
-    private float centerX() {
+    private void pickNewTarget() {
+		Random rng = new Random();
+		mTargetX = mBound*(2*rng.nextFloat() - 1);
+		mTargetY = mBound*(2*rng.nextFloat() - 1);
+	}
+
+	private float centerX() {
         return mSprite.position().x;
     }
 

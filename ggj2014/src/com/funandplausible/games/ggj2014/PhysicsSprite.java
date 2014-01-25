@@ -55,4 +55,8 @@ public class PhysicsSprite extends Drawable implements Updateable {
         mBody.setLinearVelocity(x / GameServices.PIXELS_PER_METER, y
                 / GameServices.PIXELS_PER_METER);
     }
+
+    public Fixture getFixture() {
+        return mFixture;
+    }
 }

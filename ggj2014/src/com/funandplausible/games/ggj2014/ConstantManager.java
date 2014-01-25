@@ -13,24 +13,15 @@ public class ConstantManager {
     }
 
     public float getFloat(String key) {
-        if (!mValues.containsKey(key)) {
-            throw new Error("couldn't find constant " + key);
-        }
-        return Float.parseFloat(mValues.get(key));
+        return Float.parseFloat(getString(key));
     }
 
     public int getInt(String key) {
-        if (!mValues.containsKey(key)) {
-            throw new Error("couldn't find constant " + key);
-        }
-        return Integer.parseInt(mValues.get(key));
+        return Integer.parseInt(getString(key));
     }
 
     public boolean getBoolean(String key) {
-        if (!mValues.containsKey(key)) {
-            throw new Error("couldn't find constant " + key);
-        }
-        return mValues.get(key).equals("true") ? true : false;
+        return getString(key).equals("true");
     }
 
     public String getString(String key) {
@@ -51,7 +42,10 @@ public class ConstantManager {
     }
 
     private void addConstantFromLine(String[] split) {
-        assert split.length == 3;
+        if (split.length != 3) {
+            throw new IllegalArgumentException(
+                    "split does not contain 3 elements");
+        }
         String name = split[0];
         String type = split[1];
         String value = split[2];
@@ -63,23 +57,35 @@ public class ConstantManager {
 
     private void validateValue(String name, String type, String value) {
         if (type.equals("float")) {
-            try {
-                Float.parseFloat(value);
-            } catch (NumberFormatException nfe) {
-                throw new Error("Failed to parse float value " + name);
-            }
+            checkFloatFormat(name, value);
         } else if (type.equals("int")) {
-            try {
-                Integer.parseInt(value);
-            } catch (NumberFormatException nfe) {
-                throw new Error("Failed to parse int value " + name);
-            }
+            checkIntegerFormat(name, value);
         } else if (type.equals("bool")) {
-            if (!(value.equals("true") || value.equals("false"))) {
-                throw new Error("failed to parse bool value " + name);
-            }
+            checkBoolFormat(name, value);
         } else if (!type.equals("string")) {
             throw new Error("invalid type " + type + " for constant " + name);
+        }
+    }
+
+    private void checkBoolFormat(String name, String value) throws Error {
+        if (!(value.equals("true") || value.equals("false"))) {
+            throw new Error("failed to parse bool value " + name);
+        }
+    }
+
+    private void checkIntegerFormat(String name, String value) throws Error {
+        try {
+            Integer.parseInt(value);
+        } catch (NumberFormatException nfe) {
+            throw new Error("Failed to parse int value " + name);
+        }
+    }
+
+    private void checkFloatFormat(String name, String value) throws Error {
+        try {
+            Float.parseFloat(value);
+        } catch (NumberFormatException nfe) {
+            throw new Error("Failed to parse float value " + name);
         }
     }
 
