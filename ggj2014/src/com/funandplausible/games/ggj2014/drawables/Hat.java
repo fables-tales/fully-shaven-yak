@@ -69,4 +69,9 @@ public class Hat extends Drawable implements Updateable {
 		mSprite.update();
 	}
 
+	public void rearm() {
+		mFixture.setUserData(this);
+		mFixture.setSensor(false);
+	}
+
 }

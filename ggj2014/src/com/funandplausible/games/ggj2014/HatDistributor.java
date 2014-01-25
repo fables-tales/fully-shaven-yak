@@ -6,8 +6,8 @@ import com.funandplausible.games.ggj2014.drawables.Hat;
 
 public class HatDistributor {
 	private float mHatSpawnSize;
-	public HatDistributor() {
-		mHatSpawnSize = GameRoot.services().constantManager().getInt("hat_spawn_size");
+	public HatDistributor(ConstantManager cm) {
+		mHatSpawnSize = cm.getInt("hat_spawn_size");
 	}
 
 	public List<Hat> distributeHats(List<Hat> hats) {

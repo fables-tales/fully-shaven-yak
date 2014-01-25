@@ -1,5 +1,7 @@
 package com.funandplausible.games.ggj2014;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Stack;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -92,5 +94,14 @@ public class PlayerEntity extends Drawable implements Updateable {
 
 	public void pushHat(Hat h) {
 		mHats.push(h);
+	}
+
+	public List<Hat> popAllHats() {
+		List<Hat> build = new ArrayList<Hat>();
+		while (!mHats.empty()) {
+			build.add(mHats.pop());
+		}
+		
+		return build;
 	}
 }

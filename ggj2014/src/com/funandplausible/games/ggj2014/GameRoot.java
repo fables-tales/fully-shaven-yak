@@ -8,6 +8,7 @@ import java.util.Set;
 
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -71,6 +72,15 @@ public class GameRoot implements ApplicationListener {
 	private void updateMain() {
 		Vector2 oldPlayerPosition = new Vector2(mPlayer.position());
 		services().world().step((float) (60/1000.0), 3, 3);
+		
+		if (Gdx.input.isKeyPressed(Keys.SPACE)) {
+			List<Hat> playersHats = mPlayer.popAllHats();
+			for (Hat h : playersHats) {
+				h.rearm();
+			}
+
+			services().hatDistributor().distributeHats(playersHats);
+		}
 
 		for (Updateable u : mUpdateables) {
 			u.update();
@@ -135,8 +145,9 @@ public class GameRoot implements ApplicationListener {
 	}
 
 	private void createHats() {
-		HatDistributor hd = new HatDistributor();
+		HatDistributor hd = services().hatDistributor();
 		HatGenerator hg = new HatGenerator();
+
 		for (Hat h : hd.distributeHats(hg.generateHats(constants().getInt("initial_hats")))) {
 			mDrawables.add(h);
 			mUpdateables.add(h);

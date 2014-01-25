@@ -17,6 +17,7 @@ public class GameServices {
 	private ConstantManager mConstantManager = null;
 	private InputManager mInputManager;
 	private Random mRandom;
+	private HatDistributor mHatDistributor;
 	
 	public static final Vector2 GRAVITY_VECTOR = new Vector2(0.0f, 0.0f);
 	public static final int PIXELS_PER_METER = 32;
@@ -29,6 +30,7 @@ public class GameServices {
 		mWorld = makeWorld();
 		mInputManager = makeInputManager();
 		mRandom = makeRandom();
+		mHatDistributor = makeHatDistributor();
 	}
 
 	public Random random() {
@@ -93,5 +95,13 @@ public class GameServices {
 	
 	private Random makeRandom() {
 		return new Random();
+	}
+
+	public HatDistributor hatDistributor() {
+		return mHatDistributor;
+	}
+	
+	private HatDistributor makeHatDistributor() {
+		return new HatDistributor(constantManager());
 	}
 }
