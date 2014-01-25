@@ -168,7 +168,6 @@ public class GameRoot implements ApplicationListener {
 	}
 
 	private void updateMain() {
-        Vector2 oldPlayerPosition = new Vector2(mPlayer.position());
         stepPhysics();
         dropAllHats();
 
@@ -183,8 +182,8 @@ public class GameRoot implements ApplicationListener {
         }
 
         Vector2 playerPosition = mPlayer.position();
-        camera().translate(playerPosition.x - oldPlayerPosition.x,
-                playerPosition.y - oldPlayerPosition.y, 0);
+        camera().position.x = playerPosition.x;
+        camera().position.y = playerPosition.y;
         camera().update();
 
     }
