@@ -36,6 +36,7 @@ public class ComboHandler {
 		if (allPresent) {
 			decayCombo();
 			newCombo();
+			GameRoot.services().scoreBoard().winPoints(10);
 		} else {
 			tickCombo();
 		}

@@ -23,7 +23,7 @@ public class GameServices {
     private final ScoreBoard mScoreBoard;
 
     public static final Vector2 GRAVITY_VECTOR = new Vector2(0.0f, 0.0f);
-    public static final int PIXELS_PER_METER = 32;
+    public static final float PIXELS_PER_METER = 32;
 
     public GameServices(String constantsText) {
         mCamera = makeCamera();

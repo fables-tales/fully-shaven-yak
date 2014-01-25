@@ -265,6 +265,7 @@ public class GameRoot implements ApplicationListener {
         
         uiSpriteBatch().begin();
         mComboHandler.draw(uiSpriteBatch());
+        services().scoreBoard().draw(uiSpriteBatch());
         uiSpriteBatch().end();
         
     }

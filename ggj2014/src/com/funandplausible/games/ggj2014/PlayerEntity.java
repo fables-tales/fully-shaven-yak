@@ -38,13 +38,13 @@ public class PlayerEntity extends Drawable implements Updateable,
 
         // Define a shape for the ball
         PolygonShape ps = new PolygonShape();
-        ps.setAsBox(50 / GameServices.PIXELS_PER_METER,
-                50 / GameServices.PIXELS_PER_METER);
+        ps.setAsBox(12 / GameServices.PIXELS_PER_METER,
+                25 / GameServices.PIXELS_PER_METER);
 
         // Define a fixture for the ball
         FixtureDef ballFixtureDef = new FixtureDef();
         ballFixtureDef.shape = ps;
-        ballFixtureDef.density = 1;
+        ballFixtureDef.density = 100;
 
         // Create a ball
         ballBody = GameRoot.services().world().createBody(ballBodyDef);
@@ -159,12 +159,10 @@ public class PlayerEntity extends Drawable implements Updateable,
 
     @Override
     public void loseInteraction(HatInteractor other) {
-        GameRoot.services().scoreBoard().losePoints(10);
     }
 
     @Override
     public void winInteraction(HatInteractor other) {
-        GameRoot.services().scoreBoard().winPoints(10);
         if (other.hatCount() > 0 && mHats.size() < 10) {
             mHats.add(other.getHats().pop());
         }
