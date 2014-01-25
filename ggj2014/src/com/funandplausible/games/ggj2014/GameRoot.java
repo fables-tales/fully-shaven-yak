@@ -211,7 +211,7 @@ public class GameRoot implements ApplicationListener {
         if (Gdx.input.isKeyPressed(Keys.SPACE)) {
             List<Hat> playersHats = mPlayer.popAllHats();
             for (Hat h : playersHats) {
-                h.rearm();
+                h.setLoose();
             }
 
             services().hatDistributor().distributeHats(playersHats);

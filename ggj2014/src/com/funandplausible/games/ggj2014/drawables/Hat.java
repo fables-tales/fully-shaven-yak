@@ -10,7 +10,6 @@ import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
-import com.funandplausible.games.ggj2014.GameRoot;
 import com.funandplausible.games.ggj2014.GameServices;
 import com.funandplausible.games.ggj2014.PhysicsSprite;
 import com.funandplausible.games.ggj2014.Updateable;
@@ -52,9 +51,11 @@ public class Hat extends Drawable implements Updateable {
         mFixture = ballFixture;
         
         s.setColor(color);
+        
+        setBound();
     }
 
-    public void disarm() {
+    public void setBound() {
         mFixture.setUserData(null);
         mFixture.setSensor(true);
     }
@@ -82,7 +83,7 @@ public class Hat extends Drawable implements Updateable {
     	return mKey;
     }
 
-    public void rearm() {
+    public void setLoose() {
         mFixture.setUserData(this);
         mFixture.setSensor(false);
     }
