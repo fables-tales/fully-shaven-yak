@@ -66,12 +66,12 @@ public class GameRoot implements ApplicationListener {
 		float bounds = constants().getFloat("enemy_bounds");
 		float enemySpeed = constants().getFloat("enemy_speed");
 		boolean leftMovingEnemy = random().nextBoolean();
-		float initialX = leftMovingEnemy ? bounds : -bounds;
+		float initialX = leftMovingEnemy ? bounds + random().nextFloat()*1000 : -bounds - random().nextFloat()*1000;
 		float initialY = random().nextFloat()*bounds*2-bounds;
 		float initialVelocityX = leftMovingEnemy ? -enemySpeed : enemySpeed;
 		HatGenerator hg = services().hatGenerator();
 		List<Hat> hats = hg.generateHats(3);
-		EnemyEntity ee = new EnemyEntity(initialX, initialY, initialVelocityX, bounds, hats);
+		EnemyEntity ee = new EnemyEntity(initialX, initialY, initialVelocityX, bounds, hats, mPlayer);
 		mUpdateables.addAll(hats);
 		mDrawables.addAll(hats);
 		mEnemyEntities.add(ee);
@@ -105,8 +105,46 @@ public class GameRoot implements ApplicationListener {
 
 	private void updateMain() {
 		Vector2 oldPlayerPosition = new Vector2(mPlayer.position());
-		services().world().step((float) (60/1000.0), 3, 3);
+		stepPhysics();
+		dropAllHats();
+
+		for (Updateable u : mUpdateables) {
+			u.update();
+		}
 		
+		removeDeadEnemies();
+		
+		Vector2 playerPosition = mPlayer.position();
+		camera().translate(playerPosition.x-oldPlayerPosition.x, playerPosition.y-oldPlayerPosition.y, 0);
+		camera().update();
+		
+	}
+
+	private void removeDeadEnemies() {
+		List<EnemyEntity> deadEntities = new ArrayList<EnemyEntity>();
+
+		for (EnemyEntity ee : mEnemyEntities) {
+			if (ee.dead()) {
+				deadEntities.add(ee);
+			}
+		}
+		
+		mEnemyEntities.removeAll(deadEntities);
+
+		for (EnemyEntity ee : deadEntities) {
+			System.out.println("generating");
+			mDrawables.remove(ee);
+			mUpdateables.remove(ee);
+			services().world().destroyBody(ee.body());
+			generateEnemy();
+		}
+	}
+
+	private void stepPhysics() {
+		services().world().step((float) (60/1000.0), 3, 3);
+	}
+
+	private void dropAllHats() {
 		if (Gdx.input.isKeyPressed(Keys.SPACE)) {
 			List<Hat> playersHats = mPlayer.popAllHats();
 			for (Hat h : playersHats) {
@@ -115,16 +153,6 @@ public class GameRoot implements ApplicationListener {
 
 			services().hatDistributor().distributeHats(playersHats);
 		}
-
-		for (Updateable u : mUpdateables) {
-			u.update();
-		}
-		
-		Vector2 playerPosition = mPlayer.position();
-		
-		camera().translate(playerPosition.x-oldPlayerPosition.x, playerPosition.y-oldPlayerPosition.y, 0);
-		camera().update();
-		
 	}
 
 	private void clear() {

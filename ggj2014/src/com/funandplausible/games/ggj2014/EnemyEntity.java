@@ -3,6 +3,7 @@ package com.funandplausible.games.ggj2014;
 import java.util.List;
 import java.util.Stack;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.physics.box2d.Body;
@@ -22,14 +23,18 @@ public class EnemyEntity extends Drawable implements Updateable, HatInteractor {
 	private float mVelocityX;
 	private PhysicsSprite mSprite;
 	private Stack<Hat> mHats;
+	private boolean mDead = false;
+	private Sprite mGDXSprite;
+	private HatInteractor mPlayer;
 
 	public EnemyEntity(float initialX, float initialY, float initialVelocityX,
-			float bounds, List<Hat> hats) {
+			float bounds, List<Hat> hats, HatInteractor player) {
 		mX = initialX;
 		mY = initialY;
 		mVelocityX = initialVelocityX;
 		mHats = new Stack<Hat>();
 		mHats.addAll(hats);
+		mPlayer = player;
 		setupPhysicsSprite();
 	}
 
@@ -65,6 +70,7 @@ public class EnemyEntity extends Drawable implements Updateable, HatInteractor {
 		s.setColor(1.0f, 0.0f, 1.0f, 1.0f);
 		SpriteDrawable sd = new SpriteDrawable(s, 200);
 		mSprite = new PhysicsSprite(sd, ballBody, ballFixture);
+		mGDXSprite = s;
 	}
 
 	@Override
@@ -93,7 +99,28 @@ public class EnemyEntity extends Drawable implements Updateable, HatInteractor {
 
 	@Override
 	public void draw(SpriteBatch sb) {
+		mGDXSprite.setColor(playerHatDeltaColor());
 		mSprite.draw(sb);
+	}
+	
+	private Color playerHatDeltaColor() {
+		if (hatCount() < mPlayer.hatCount()) {
+			return Color.WHITE;
+		} else {
+			float whiteStop = 0;
+			float redStop = 10;
+
+			float delta = hatCount() - mPlayer.hatCount();
+			float alongness = delta / (redStop - whiteStop);
+			float r = 1.0f;
+			float g = 1.0f-alongness;
+			float b = 1.0f-alongness;
+			return new Color(r, g, b, 1.0f);
+		}
+	}
+
+	private int playerHatCount() {
+		return mPlayer.hatCount();
 	}
 
 	@Override
@@ -103,17 +130,33 @@ public class EnemyEntity extends Drawable implements Updateable, HatInteractor {
 
 	@Override
 	public void loseInteraction(HatInteractor other) {
-		System.out.println("enemy is sad :(");
+		if (mHats.empty()) {
+			die();
+		}
+	}
+
+	private void die() {
+		mDead = true;
+	}
+	
+	public boolean dead() {
+		return mDead;
 	}
 
 	@Override
 	public void winInteraction(HatInteractor other) {
-		System.out.println("enemy is happy");
+		if (other.hatCount() > 0) {
+			mHats.push(other.getHats().pop());
+		}
 	}
 
 	@Override
 	public Stack<Hat> getHats() {
 		return mHats;
+	}
+
+	public Body body() {
+		return mSprite.body();
 	}
 
 }

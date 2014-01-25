@@ -93,7 +93,6 @@ public class PlayerEntity extends Drawable implements Updateable, HatInteractor 
 	}
 
 	public void pushHat(Hat h) {
-		System.out.println("new hat");
 		if (!mHats.contains(h)) {
 			mHats.push(h);
 		}

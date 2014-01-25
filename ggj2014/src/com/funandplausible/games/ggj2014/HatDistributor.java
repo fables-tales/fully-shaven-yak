@@ -13,11 +13,11 @@ public class HatDistributor {
 	public List<Hat> distributeHats(List<Hat> hats) {
 		for (Hat h : hats) {
 			float x = GameRoot.services().random().nextFloat()*mHatSpawnSize - mHatSpawnSize/2;
-			while (Math.abs(x) < 200) {
+			while (Math.abs(x) < 100) {
 				x = GameRoot.services().random().nextFloat()*mHatSpawnSize - mHatSpawnSize/2;
 			}
 			float y = GameRoot.services().random().nextFloat()*mHatSpawnSize - mHatSpawnSize/2;
-			while (Math.abs(y) < 200) {
+			while (Math.abs(y) < 100) {
 				y = GameRoot.services().random().nextFloat()*mHatSpawnSize - mHatSpawnSize/2;
 			}
 			System.out.println(x + " " + y);
