@@ -1,5 +1,5 @@
 name|type|value
-debug_physics|bool|true
+debug_physics|bool|false
 player_speed|float|4.0
 hat_spawn_size|float|1000
 initial_hats|int|10
