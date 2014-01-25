@@ -43,7 +43,7 @@ public class Hat extends Drawable implements Updateable {
         // Create a ball
         ballBody = gs.world().createBody(ballBodyDef);
         ballFixture = ballBody.createFixture(ballFixtureDef);
-        SpriteDrawable sd = new SpriteDrawable(s, 10);
+        SpriteDrawable sd = new SpriteDrawable(s, 100000);
         mSprite = new PhysicsSprite(sd, ballBody, ballFixture);
         ballFixture.setUserData(this);
         ballBody.setUserData(this);

@@ -95,7 +95,7 @@ public class EnemyEntity extends Drawable implements Updateable, HatInteractor,
         ballBody.setUserData(this);
 
         Sprite s = GameRoot.services().contentManager().loadSprite("bees.png");
-        s.setBounds(0, 0, 75, 75);
+        s.setBounds(0, 0, 75, 75*1.844f);
         s.setColor(1.0f, 0.0f, 1.0f, 1.0f);
         SpriteDrawable sd = new SpriteDrawable(s, 200);
         mSprite = new PhysicsSprite(sd, ballBody, ballFixture);
@@ -194,6 +194,10 @@ public class EnemyEntity extends Drawable implements Updateable, HatInteractor,
     @Override
     public void draw(SpriteBatch sb) {
         Sprite sprite = mAnimationManager.nextFrame();
+        if (sprite == null) {
+        	mAnimationManager.startAnimation("walk_left_bad");
+        	sprite = mAnimationManager.nextFrame();
+        }
         sprite.setPosition(mSprite.position().x - 75 / (2 * 1.844f),
                 mSprite.position().y - 75 / 2);
         sprite.setColor(playerHatDeltaColor());
