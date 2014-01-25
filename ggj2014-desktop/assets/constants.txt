@@ -8,6 +8,12 @@ enemy_bounds|float|500
 enemy_speed|float|8
 spawn_hats_on_floor|bool|false
 min_hats_per_type|int|5
+white_2_hat_probability|float|0.9
+white_1_hat_probability|float|0.9
+white_0_hat_probability|float|0.9
+black_2_hat_probability|float|0.9
+black_1_hat_probability|float|0.9
+black_0_hat_probability|float|0.9
 blue_2_hat_probability|float|0.9
 blue_1_hat_probability|float|0.9
 blue_0_hat_probability|float|0.9
