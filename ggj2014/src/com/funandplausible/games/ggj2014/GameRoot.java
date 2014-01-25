@@ -332,7 +332,7 @@ public class GameRoot implements ApplicationListener {
 
     private void createBackground() {
         SpriteDrawable sd = new SpriteDrawable(services().contentManager()
-                .loadSprite("background.jpg"), -1000);
+                .loadSprite("marble.png"), -1000);
         float bound = services().constantManager().getFloat("enemy_bounds");
         sd.setPosition(-bound, -bound);
         mDrawables.add(sd);
