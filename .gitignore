@@ -2,3 +2,8 @@
 ggj2014-desktop/.gitignore
 ggj2014/bin
 ggj2014-html/war/WEB-INF
+ggj2014-html/war/assets
+ggj2014-html/war/com.funandplausible.games.ggj2014.GwtDefinition
+ggj2014-html/gwt-unitCache
+ggj2014-html/war/WEB-INF/classes/com/funandplausible/games/ggj2014/GwtDefinition.gwt.xml
+ggj2014-html/.settings
