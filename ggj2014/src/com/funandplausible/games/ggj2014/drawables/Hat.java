@@ -15,69 +15,70 @@ import com.funandplausible.games.ggj2014.PhysicsSprite;
 import com.funandplausible.games.ggj2014.Updateable;
 
 public class Hat extends Drawable implements Updateable {
-	
-	private PhysicsSprite mSprite;
-	private Fixture mFixture;
-	
-	public Hat(Sprite s) {
-		//Define a body for the ball
-		Body ballBody;
 
-		//Fixture for the ball
-		Fixture ballFixture;
-		BodyDef ballBodyDef = new BodyDef();
-		ballBodyDef.type = BodyType.StaticBody;
-		//Define a shape for the ball
-		PolygonShape ps = new PolygonShape();
-		ps.setAsBox(5.0f/GameServices.PIXELS_PER_METER, 5.0f/GameServices.PIXELS_PER_METER);
+    private final PhysicsSprite mSprite;
+    private final Fixture mFixture;
 
-		//Define a fixture for the ball
-		FixtureDef ballFixtureDef = new FixtureDef();
-		ballFixtureDef.shape = ps;
-		ballFixtureDef.density = 1;
+    public Hat(Sprite s) {
+        // Define a body for the ball
+        Body ballBody;
 
-		//Create a ball
-		ballBody = GameRoot.services().world().createBody(ballBodyDef);
-		ballFixture = ballBody.createFixture(ballFixtureDef);
-		SpriteDrawable sd = new SpriteDrawable(s, 10);
-		mSprite = new PhysicsSprite(sd, ballBody, ballFixture);
-		ballFixture.setUserData(this);
-		ballBody.setUserData(this);
-		ballBody.setTransform(new Vector2(10000, 10000), 0);
-		mFixture = ballFixture;
-	}
-	
-	public void disarm() {
-		mFixture.setUserData(null);
-		mFixture.setSensor(true);
-	}
+        // Fixture for the ball
+        Fixture ballFixture;
+        BodyDef ballBodyDef = new BodyDef();
+        ballBodyDef.type = BodyType.StaticBody;
+        // Define a shape for the ball
+        PolygonShape ps = new PolygonShape();
+        ps.setAsBox(5.0f / GameServices.PIXELS_PER_METER,
+                5.0f / GameServices.PIXELS_PER_METER);
 
-	public void setPosition(float x, float y) {
-		mSprite.setPosition(x, y);
-	}
+        // Define a fixture for the ball
+        FixtureDef ballFixtureDef = new FixtureDef();
+        ballFixtureDef.shape = ps;
+        ballFixtureDef.density = 1;
 
-	@Override
-	public int priority() {
-		return mSprite.priority();
-	}
+        // Create a ball
+        ballBody = GameRoot.services().world().createBody(ballBodyDef);
+        ballFixture = ballBody.createFixture(ballFixtureDef);
+        SpriteDrawable sd = new SpriteDrawable(s, 10);
+        mSprite = new PhysicsSprite(sd, ballBody, ballFixture);
+        ballFixture.setUserData(this);
+        ballBody.setUserData(this);
+        ballBody.setTransform(new Vector2(10000, 10000), 0);
+        mFixture = ballFixture;
+    }
 
-	@Override
-	public void draw(SpriteBatch sb) {
-		mSprite.draw(sb);
-	}
+    public void disarm() {
+        mFixture.setUserData(null);
+        mFixture.setSensor(true);
+    }
 
-	@Override
-	public void update() {
-		mSprite.update();
-	}
+    public void setPosition(float x, float y) {
+        mSprite.setPosition(x, y);
+    }
 
-	public void rearm() {
-		mFixture.setUserData(this);
-		mFixture.setSensor(false);
-	}
+    @Override
+    public int priority() {
+        return mSprite.priority();
+    }
 
-	public Vector2 position() {
-		return mSprite.position();
-	}
+    @Override
+    public void draw(SpriteBatch sb) {
+        mSprite.draw(sb);
+    }
+
+    @Override
+    public void update() {
+        mSprite.update();
+    }
+
+    public void rearm() {
+        mFixture.setUserData(this);
+        mFixture.setSensor(false);
+    }
+
+    public Vector2 position() {
+        return mSprite.position();
+    }
 
 }

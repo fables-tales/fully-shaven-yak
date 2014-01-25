@@ -10,118 +10,118 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 
 public class GameServices {
-	private Camera mCamera = null;
-	private SpriteBatch mMainSpriteBatch = null;
-	private ContentManager mContentManager = null;
-	private World mWorld = null;
-	private ConstantManager mConstantManager = null;
-	private InputManager mInputManager;
-	private Random mRandom;
-	private HatDistributor mHatDistributor;
-	private HatGenerator mHatGenerator;
-	private ScoreBoard mScoreBoard;
-	
-	public static final Vector2 GRAVITY_VECTOR = new Vector2(0.0f, 0.0f);
-	public static final int PIXELS_PER_METER = 32;
+    private Camera mCamera = null;
+    private SpriteBatch mMainSpriteBatch = null;
+    private ContentManager mContentManager = null;
+    private World mWorld = null;
+    private ConstantManager mConstantManager = null;
+    private final InputManager mInputManager;
+    private final Random mRandom;
+    private final HatDistributor mHatDistributor;
+    private final HatGenerator mHatGenerator;
+    private final ScoreBoard mScoreBoard;
 
-	public GameServices() {
-		mCamera = makeCamera();
-		mMainSpriteBatch = makeSpriteBatch();
-		mContentManager = makeContentManager();
-		mConstantManager = makeConstantManager();
-		mWorld = makeWorld();
-		mInputManager = makeInputManager();
-		mRandom = makeRandom();
-		mHatDistributor = makeHatDistributor();
-		mScoreBoard = makeScoreBoard();
-		mHatGenerator = makeHatGenerator();
-	}
+    public static final Vector2 GRAVITY_VECTOR = new Vector2(0.0f, 0.0f);
+    public static final int PIXELS_PER_METER = 32;
 
-	private HatGenerator makeHatGenerator() {
-		return new HatGenerator(this);
-	}
+    public GameServices() {
+        mCamera = makeCamera();
+        mMainSpriteBatch = makeSpriteBatch();
+        mContentManager = makeContentManager();
+        mConstantManager = makeConstantManager();
+        mWorld = makeWorld();
+        mInputManager = makeInputManager();
+        mRandom = makeRandom();
+        mHatDistributor = makeHatDistributor();
+        mScoreBoard = makeScoreBoard();
+        mHatGenerator = makeHatGenerator();
+    }
 
-	private ScoreBoard makeScoreBoard() {
-		return new ScoreBoard();
-	}
-	
-	public HatGenerator hatGenerator() {
-		return mHatGenerator;
-	}
+    private HatGenerator makeHatGenerator() {
+        return new HatGenerator(this);
+    }
 
-	public Random random() {
-		return mRandom;
-	}
-	
-	public World world() {
-		return mWorld;
-	}
-	
-	public Camera camera() {
-		return mCamera;
-	}
-	
-	public SpriteBatch mainSpriteBatch() {
-		return mMainSpriteBatch;
-	}
-	
-	public ContentManager contentManager() {
-		return mContentManager;
-	}
-	
-	public ConstantManager constantManager() {
-		return mConstantManager;
-	}
-	
-	public float screenWidth() {
-		return Gdx.graphics.getWidth();
-	}
-	public float screenHeight() {
-		return Gdx.graphics.getHeight();
-	}
+    private ScoreBoard makeScoreBoard() {
+        return new ScoreBoard();
+    }
 
-	public InputManager inputManager() {
-		return mInputManager;
-	}
+    public HatGenerator hatGenerator() {
+        return mHatGenerator;
+    }
 
-	
-	private Camera makeCamera() {
-		return new OrthographicCamera(screenWidth(), screenHeight());
-	}
-	
-	private SpriteBatch makeSpriteBatch() {
-		return new SpriteBatch();
-	}
-	
-	private ContentManager makeContentManager() {
-		return new ContentManager();
-	}
-	
-	private World makeWorld() {
-		return new World(GRAVITY_VECTOR, true);
-	}
-	
-	private ConstantManager makeConstantManager() {
-		return new ConstantManager(Gdx.files.internal("assets/constants.txt"));
-	}
-	
-	private InputManager makeInputManager() {
-		return new InputManager();
-	}
-	
-	private Random makeRandom() {
-		return new Random();
-	}
+    public Random random() {
+        return mRandom;
+    }
 
-	public HatDistributor hatDistributor() {
-		return mHatDistributor;
-	}
-	
-	private HatDistributor makeHatDistributor() {
-		return new HatDistributor(constantManager());
-	}
+    public World world() {
+        return mWorld;
+    }
 
-	public ScoreBoard scoreBoard() {
-		return mScoreBoard;
-	}
+    public Camera camera() {
+        return mCamera;
+    }
+
+    public SpriteBatch mainSpriteBatch() {
+        return mMainSpriteBatch;
+    }
+
+    public ContentManager contentManager() {
+        return mContentManager;
+    }
+
+    public ConstantManager constantManager() {
+        return mConstantManager;
+    }
+
+    public float screenWidth() {
+        return Gdx.graphics.getWidth();
+    }
+
+    public float screenHeight() {
+        return Gdx.graphics.getHeight();
+    }
+
+    public InputManager inputManager() {
+        return mInputManager;
+    }
+
+    private Camera makeCamera() {
+        return new OrthographicCamera(screenWidth(), screenHeight());
+    }
+
+    private SpriteBatch makeSpriteBatch() {
+        return new SpriteBatch();
+    }
+
+    private ContentManager makeContentManager() {
+        return new ContentManager();
+    }
+
+    private World makeWorld() {
+        return new World(GRAVITY_VECTOR, true);
+    }
+
+    private ConstantManager makeConstantManager() {
+        return new ConstantManager(Gdx.files.internal("assets/constants.txt"));
+    }
+
+    private InputManager makeInputManager() {
+        return new InputManager();
+    }
+
+    private Random makeRandom() {
+        return new Random();
+    }
+
+    public HatDistributor hatDistributor() {
+        return mHatDistributor;
+    }
+
+    private HatDistributor makeHatDistributor() {
+        return new HatDistributor(constantManager());
+    }
+
+    public ScoreBoard scoreBoard() {
+        return mScoreBoard;
+    }
 }

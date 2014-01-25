@@ -4,35 +4,35 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class SpriteDrawable extends Drawable {
-	
-	private Sprite mSprite;
-	private int mPriority;
-	
-	public SpriteDrawable(Sprite s, int priority) {
-		mPriority = priority;
-		mSprite = s;
-	}
-	
-	public float getWidth() {
-		return mSprite.getWidth();
-	}
-	
-	public float getHeight() {
-		return mSprite.getHeight();
-	}
 
-	@Override
-	public void draw(SpriteBatch sb) {
-		mSprite.draw(sb);
-	}
+    private final Sprite mSprite;
+    private final int mPriority;
 
-	public void setPosition(float x, float y) {
-		mSprite.setPosition(x, y);
-	}
+    public SpriteDrawable(Sprite s, int priority) {
+        mPriority = priority;
+        mSprite = s;
+    }
 
-	@Override
-	public int priority() {
-		return mPriority;
-	}
+    public float getWidth() {
+        return mSprite.getWidth();
+    }
+
+    public float getHeight() {
+        return mSprite.getHeight();
+    }
+
+    @Override
+    public void draw(SpriteBatch sb) {
+        mSprite.draw(sb);
+    }
+
+    public void setPosition(float x, float y) {
+        mSprite.setPosition(x, y);
+    }
+
+    @Override
+    public int priority() {
+        return mPriority;
+    }
 
 }

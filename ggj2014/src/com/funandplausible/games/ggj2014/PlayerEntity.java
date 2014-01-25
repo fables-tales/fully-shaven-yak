@@ -18,116 +18,119 @@ import com.funandplausible.games.ggj2014.drawables.Hat;
 import com.funandplausible.games.ggj2014.drawables.SpriteDrawable;
 
 public class PlayerEntity extends Drawable implements Updateable, HatInteractor {
-	private PhysicsSprite mSprite = null;
-	private float mPlayerSpeed;
-	private Stack<Hat> mHats = new Stack<Hat>();
+    private PhysicsSprite mSprite = null;
+    private final float mPlayerSpeed;
+    private final Stack<Hat> mHats = new Stack<Hat>();
 
-	public PlayerEntity() {
-		//Define a body for the ball
-		Body ballBody;
+    public PlayerEntity() {
+        // Define a body for the ball
+        Body ballBody;
 
-		//Fixture for the ball
-		Fixture ballFixture;
-		BodyDef ballBodyDef = new BodyDef();
-		ballBodyDef.type = BodyType.DynamicBody;
-		ballBodyDef.position.set(0/GameServices.PIXELS_PER_METER, 0/GameServices.PIXELS_PER_METER);
-		ballBodyDef.fixedRotation = true;
+        // Fixture for the ball
+        Fixture ballFixture;
+        BodyDef ballBodyDef = new BodyDef();
+        ballBodyDef.type = BodyType.DynamicBody;
+        ballBodyDef.position.set(0 / GameServices.PIXELS_PER_METER,
+                0 / GameServices.PIXELS_PER_METER);
+        ballBodyDef.fixedRotation = true;
 
-		//Define a shape for the ball
-		PolygonShape ps = new PolygonShape();
-		ps.setAsBox(50/GameServices.PIXELS_PER_METER, 50/GameServices.PIXELS_PER_METER);
+        // Define a shape for the ball
+        PolygonShape ps = new PolygonShape();
+        ps.setAsBox(50 / GameServices.PIXELS_PER_METER,
+                50 / GameServices.PIXELS_PER_METER);
 
-		//Define a fixture for the ball
-		FixtureDef ballFixtureDef = new FixtureDef();
-		ballFixtureDef.shape = ps;
-		ballFixtureDef.density = 1;
+        // Define a fixture for the ball
+        FixtureDef ballFixtureDef = new FixtureDef();
+        ballFixtureDef.shape = ps;
+        ballFixtureDef.density = 1;
 
-		//Create a ball
-		ballBody = GameRoot.services().world().createBody(ballBodyDef);
-		ballFixture = ballBody.createFixture(ballFixtureDef);
-		ballFixture.setUserData(this);
-		ballBody.setUserData(this);
-		
-		Sprite s = GameRoot.services().contentManager().loadSprite("bees.png");
-		s.setBounds(0, 0, 75, 75);
-		SpriteDrawable sd = new SpriteDrawable(s, 1000);
-		mSprite = new PhysicsSprite(sd, ballBody, ballFixture);
-		mPlayerSpeed = GameRoot.services().constantManager().getFloat("player_speed");
-	}
+        // Create a ball
+        ballBody = GameRoot.services().world().createBody(ballBodyDef);
+        ballFixture = ballBody.createFixture(ballFixtureDef);
+        ballFixture.setUserData(this);
+        ballBody.setUserData(this);
 
-	@Override
-	public void update() {
-		mSprite.body().setLinearVelocity(inputVector().scl(mPlayerSpeed));
-		int i = 0;
-		for (Hat h : mHats) {
-			i++;
-			h.setPosition(centerX(), centerY()+50+i*15);
-		}
-		mSprite.update();
-	}
-	
-	private float centerY() {
-		return position().y;
-	}
+        Sprite s = GameRoot.services().contentManager().loadSprite("bees.png");
+        s.setBounds(0, 0, 75, 75);
+        SpriteDrawable sd = new SpriteDrawable(s, 1000);
+        mSprite = new PhysicsSprite(sd, ballBody, ballFixture);
+        mPlayerSpeed = GameRoot.services().constantManager()
+                .getFloat("player_speed");
+    }
 
-	private float centerX() {
-		return position().x;
-	}
+    @Override
+    public void update() {
+        mSprite.body().setLinearVelocity(inputVector().scl(mPlayerSpeed));
+        int i = 0;
+        for (Hat h : mHats) {
+            i++;
+            h.setPosition(centerX(), centerY() + 50 + i * 15);
+        }
+        mSprite.update();
+    }
 
-	public Vector2 position() {
-		return mSprite.position();
-	}
+    private float centerY() {
+        return position().y;
+    }
 
-	@Override
-	public int priority() {
-		return mSprite.priority();
-	}
+    private float centerX() {
+        return position().x;
+    }
 
-	@Override
-	public void draw(SpriteBatch sb) {
-		mSprite.draw(sb);
-	}
+    public Vector2 position() {
+        return mSprite.position();
+    }
 
-	private Vector2 inputVector() {
-		return GameRoot.services().inputManager().inputVector();
-	}
+    @Override
+    public int priority() {
+        return mSprite.priority();
+    }
 
-	public void pushHat(Hat h) {
-		if (!mHats.contains(h)) {
-			mHats.push(h);
-		}
-	}
+    @Override
+    public void draw(SpriteBatch sb) {
+        mSprite.draw(sb);
+    }
 
-	public List<Hat> popAllHats() {
-		List<Hat> build = new ArrayList<Hat>();
-		while (!mHats.empty()) {
-			build.add(mHats.pop());
-		}
-		
-		return build;
-	}
+    private Vector2 inputVector() {
+        return GameRoot.services().inputManager().inputVector();
+    }
 
-	@Override
-	public int hatCount() {
-		return mHats.size();
-	}
+    public void pushHat(Hat h) {
+        if (!mHats.contains(h)) {
+            mHats.push(h);
+        }
+    }
 
-	@Override
-	public void loseInteraction(HatInteractor other) {
-		GameRoot.services().scoreBoard().losePoints(10);
-	}
+    public List<Hat> popAllHats() {
+        List<Hat> build = new ArrayList<Hat>();
+        while (!mHats.empty()) {
+            build.add(mHats.pop());
+        }
 
-	@Override
-	public void winInteraction(HatInteractor other) {
-		System.out.println("won interaction");
-		GameRoot.services().scoreBoard().winPoints(10);
-		if (other.hatCount() > 0) {
-			mHats.add(other.getHats().pop());
-		}
-	}
+        return build;
+    }
 
-	@Override
-	public Stack<Hat> getHats() {
-		return mHats;
-	}
+    @Override
+    public int hatCount() {
+        return mHats.size();
+    }
+
+    @Override
+    public void loseInteraction(HatInteractor other) {
+        GameRoot.services().scoreBoard().losePoints(10);
+    }
+
+    @Override
+    public void winInteraction(HatInteractor other) {
+        System.out.println("won interaction");
+        GameRoot.services().scoreBoard().winPoints(10);
+        if (other.hatCount() > 0) {
+            mHats.add(other.getHats().pop());
+        }
+    }
+
+    @Override
+    public Stack<Hat> getHats() {
+        return mHats;
+    }
 }

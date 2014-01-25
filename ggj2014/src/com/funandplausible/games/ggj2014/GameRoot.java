@@ -22,206 +22,211 @@ import com.funandplausible.games.ggj2014.drawables.SpriteDrawable;
 
 public class GameRoot implements ApplicationListener {
 
-	private static GameServices sServices;
-	private static final int STATE_MAIN = 0x01;
+    private static GameServices sServices;
+    private static final int STATE_MAIN = 0x01;
 
-	public static GameServices services() {
-		return sServices;
-	}
+    public static GameServices services() {
+        return sServices;
+    }
 
-	private List<Drawable> mDrawables;
-	private Set<Updateable> mUpdateables; 
-	private int mState;
-	private Box2DDebugRenderer mDebugRenderer;
-	private PlayerEntity mPlayer;
-	private List<EnemyEntity> mEnemyEntities;
-	private int mNEnemies;
+    private List<Drawable> mDrawables;
+    private Set<Updateable> mUpdateables;
+    private int mState;
+    private Box2DDebugRenderer mDebugRenderer;
+    private PlayerEntity mPlayer;
+    private List<EnemyEntity> mEnemyEntities;
+    private int mNEnemies;
 
-	@Override
-	public void create() {		
-		GameRoot.sServices = new GameServices();
-		mDrawables = new ArrayList<Drawable>();
-		mUpdateables = new HashSet<Updateable>();
-		mEnemyEntities = new ArrayList<EnemyEntity>();
-		mNEnemies = constants().getInt("n_enemies");
-		
-		mState = STATE_MAIN;
+    @Override
+    public void create() {
+        GameRoot.sServices = new GameServices();
+        mDrawables = new ArrayList<Drawable>();
+        mUpdateables = new HashSet<Updateable>();
+        mEnemyEntities = new ArrayList<EnemyEntity>();
+        mNEnemies = constants().getInt("n_enemies");
 
-		createPlayer();
-		createBackground();
-		createHats();
-		createEnemies();
-		createListener();
+        mState = STATE_MAIN;
 
-		mDebugRenderer = new Box2DDebugRenderer();
-	}
+        createPlayer();
+        createBackground();
+        createHats();
+        createEnemies();
+        createListener();
 
-	private void createEnemies() {
-		for (int i = 0; i < mNEnemies; i++) {
-			generateEnemy();
-		}
-	}
+        mDebugRenderer = new Box2DDebugRenderer();
+    }
 
-	private void generateEnemy() {
-		float bounds = constants().getFloat("enemy_bounds");
-		float enemySpeed = constants().getFloat("enemy_speed");
-		boolean leftMovingEnemy = random().nextBoolean();
-		float initialX = leftMovingEnemy ? bounds + random().nextFloat()*1000 : -bounds - random().nextFloat()*1000;
-		float initialY = random().nextFloat()*bounds*2-bounds;
-		float initialVelocityX = leftMovingEnemy ? -enemySpeed : enemySpeed;
-		HatGenerator hg = services().hatGenerator();
-		List<Hat> hats = hg.generateHats(3);
-		EnemyEntity ee = new EnemyEntity(initialX, initialY, initialVelocityX, bounds, hats, mPlayer);
-		mUpdateables.addAll(hats);
-		mDrawables.addAll(hats);
-		mEnemyEntities.add(ee);
-		mUpdateables.add(ee);
-		mDrawables.add(ee);
-	}
+    private void createEnemies() {
+        for (int i = 0; i < mNEnemies; i++) {
+            generateEnemy();
+        }
+    }
 
-	private Random random() {
-		return services().random();
-	}
+    private void generateEnemy() {
+        float bounds = constants().getFloat("enemy_bounds");
+        float enemySpeed = constants().getFloat("enemy_speed");
+        boolean leftMovingEnemy = random().nextBoolean();
+        float initialX = leftMovingEnemy ? bounds + random().nextFloat() * 1000
+                : -bounds - random().nextFloat() * 1000;
+        float initialY = random().nextFloat() * bounds * 2 - bounds;
+        float initialVelocityX = leftMovingEnemy ? -enemySpeed : enemySpeed;
+        HatGenerator hg = services().hatGenerator();
+        List<Hat> hats = hg.generateHats(3);
+        EnemyEntity ee = new EnemyEntity(initialX, initialY, initialVelocityX,
+                bounds, hats, mPlayer);
+        mUpdateables.addAll(hats);
+        mDrawables.addAll(hats);
+        mEnemyEntities.add(ee);
+        mUpdateables.add(ee);
+        mDrawables.add(ee);
+    }
 
-	private void createPlayer() {
-		mPlayer = new PlayerEntity();
-		mDrawables.add(mPlayer);
-		mUpdateables.add(mPlayer);
-	}
+    private Random random() {
+        return services().random();
+    }
 
-	@Override
-	public void dispose() {
-		mainSpriteBatch().dispose();
-	}
+    private void createPlayer() {
+        mPlayer = new PlayerEntity();
+        mDrawables.add(mPlayer);
+        mUpdateables.add(mPlayer);
+    }
 
-	@Override
-	public void render() {		
-		if (mState == STATE_MAIN) {
-			updateMain();
-			clear();
-			drawMain();
-		}
-	}
+    @Override
+    public void dispose() {
+        mainSpriteBatch().dispose();
+    }
 
-	private void updateMain() {
-		Vector2 oldPlayerPosition = new Vector2(mPlayer.position());
-		stepPhysics();
-		dropAllHats();
+    @Override
+    public void render() {
+        if (mState == STATE_MAIN) {
+            updateMain();
+            clear();
+            drawMain();
+        }
+    }
 
-		for (Updateable u : mUpdateables) {
-			u.update();
-		}
-		
-		removeDeadEnemies();
-		
-		Vector2 playerPosition = mPlayer.position();
-		camera().translate(playerPosition.x-oldPlayerPosition.x, playerPosition.y-oldPlayerPosition.y, 0);
-		camera().update();
-		
-	}
+    private void updateMain() {
+        Vector2 oldPlayerPosition = new Vector2(mPlayer.position());
+        stepPhysics();
+        dropAllHats();
 
-	private void removeDeadEnemies() {
-		List<EnemyEntity> deadEntities = new ArrayList<EnemyEntity>();
+        for (Updateable u : mUpdateables) {
+            u.update();
+        }
 
-		for (EnemyEntity ee : mEnemyEntities) {
-			if (ee.dead()) {
-				deadEntities.add(ee);
-			}
-		}
-		
-		mEnemyEntities.removeAll(deadEntities);
+        removeDeadEnemies();
 
-		for (EnemyEntity ee : deadEntities) {
-			System.out.println("generating");
-			mDrawables.remove(ee);
-			mUpdateables.remove(ee);
-			services().world().destroyBody(ee.body());
-			generateEnemy();
-		}
-	}
+        Vector2 playerPosition = mPlayer.position();
+        camera().translate(playerPosition.x - oldPlayerPosition.x,
+                playerPosition.y - oldPlayerPosition.y, 0);
+        camera().update();
 
-	private void stepPhysics() {
-		services().world().step((float) (60/1000.0), 3, 3);
-	}
+    }
 
-	private void dropAllHats() {
-		if (Gdx.input.isKeyPressed(Keys.SPACE)) {
-			List<Hat> playersHats = mPlayer.popAllHats();
-			for (Hat h : playersHats) {
-				h.rearm();
-			}
+    private void removeDeadEnemies() {
+        List<EnemyEntity> deadEntities = new ArrayList<EnemyEntity>();
 
-			services().hatDistributor().distributeHats(playersHats);
-		}
-	}
+        for (EnemyEntity ee : mEnemyEntities) {
+            if (ee.dead()) {
+                deadEntities.add(ee);
+            }
+        }
 
-	private void clear() {
-		Gdx.gl.glClearColor(1, 1, 1, 1);
-		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
-	}
+        mEnemyEntities.removeAll(deadEntities);
 
-	private void drawMain() {
-		mainSpriteBatch().setProjectionMatrix(cameraMatrix());
-		mainSpriteBatch().begin();
-		Collections.sort(mDrawables);
-		for (Drawable d : mDrawables) {
-			d.draw(mainSpriteBatch());
-		}
-		mainSpriteBatch().end();
-		if (services().constantManager().getBoolean("debug_physics")) {
-			mDebugRenderer.render(
-					services().world(),
-					services().camera().combined.cpy().scale(
-							GameServices.PIXELS_PER_METER,
-							GameServices.PIXELS_PER_METER, 1));
-		}
-	}
+        for (EnemyEntity ee : deadEntities) {
+            System.out.println("generating");
+            mDrawables.remove(ee);
+            mUpdateables.remove(ee);
+            services().world().destroyBody(ee.body());
+            generateEnemy();
+        }
+    }
 
-	@Override
-	public void resize(int width, int height) {
-	}
+    private void stepPhysics() {
+        services().world().step((float) (60 / 1000.0), 3, 3);
+    }
 
-	@Override
-	public void pause() {
-	}
+    private void dropAllHats() {
+        if (Gdx.input.isKeyPressed(Keys.SPACE)) {
+            List<Hat> playersHats = mPlayer.popAllHats();
+            for (Hat h : playersHats) {
+                h.rearm();
+            }
 
-	@Override
-	public void resume() {
-	}
+            services().hatDistributor().distributeHats(playersHats);
+        }
+    }
 
-	private SpriteBatch mainSpriteBatch() {
-		return services().mainSpriteBatch();
-	}
-	
-	private Camera camera() {
-		return services().camera();
-	}
+    private void clear() {
+        Gdx.gl.glClearColor(1, 1, 1, 1);
+        Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
+    }
 
-	private Matrix4 cameraMatrix() {
-		return services().camera().combined;
-	}
+    private void drawMain() {
+        mainSpriteBatch().setProjectionMatrix(cameraMatrix());
+        mainSpriteBatch().begin();
+        Collections.sort(mDrawables);
+        for (Drawable d : mDrawables) {
+            d.draw(mainSpriteBatch());
+        }
+        mainSpriteBatch().end();
+        if (services().constantManager().getBoolean("debug_physics")) {
+            mDebugRenderer.render(
+                    services().world(),
+                    services().camera().combined.cpy().scale(
+                            GameServices.PIXELS_PER_METER,
+                            GameServices.PIXELS_PER_METER, 1));
+        }
+    }
 
-	private void createBackground() {
-		SpriteDrawable sd = new SpriteDrawable(services().contentManager().loadSprite("bees.png"), -1000);
-		mDrawables.add(sd);
-	}
+    @Override
+    public void resize(int width, int height) {
+    }
 
-	private void createHats() {
-		HatDistributor hd = services().hatDistributor();
-		HatGenerator hg = services().hatGenerator();
+    @Override
+    public void pause() {
+    }
 
-		for (Hat h : hd.distributeHats(hg.generateHats(constants().getInt("initial_hats")))) {
-			mDrawables.add(h);
-			mUpdateables.add(h);
-		}
-	}
+    @Override
+    public void resume() {
+    }
 
-	private ConstantManager constants() {
-		return GameRoot.services().constantManager();
-	}
+    private SpriteBatch mainSpriteBatch() {
+        return services().mainSpriteBatch();
+    }
 
-	private void createListener() {
-		new CollisionHandler();
-	}
+    private Camera camera() {
+        return services().camera();
+    }
+
+    private Matrix4 cameraMatrix() {
+        return services().camera().combined;
+    }
+
+    private void createBackground() {
+        SpriteDrawable sd = new SpriteDrawable(services().contentManager()
+                .loadSprite("bees.png"), -1000);
+        mDrawables.add(sd);
+    }
+
+    private void createHats() {
+        HatDistributor hd = services().hatDistributor();
+        HatGenerator hg = services().hatGenerator();
+
+        for (Hat h : hd.distributeHats(hg.generateHats(constants().getInt(
+                "initial_hats")))) {
+            mDrawables.add(h);
+            mUpdateables.add(h);
+        }
+    }
+
+    private ConstantManager constants() {
+        return GameRoot.services().constantManager();
+    }
+
+    private void createListener() {
+        new CollisionHandler();
+    }
 
 }

@@ -3,13 +3,12 @@ package com.funandplausible.games.ggj2014.drawables;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public abstract class Drawable implements Comparable<Drawable> {
-	public abstract int priority();
-	public abstract void draw(SpriteBatch sb);
+    public abstract int priority();
 
-	@Override
-	public int compareTo(Drawable o) {
-		return priority() - o.priority();
-	}
+    public abstract void draw(SpriteBatch sb);
+
+    @Override
+    public int compareTo(Drawable o) {
+        return priority() - o.priority();
+    }
 }
-
-		
