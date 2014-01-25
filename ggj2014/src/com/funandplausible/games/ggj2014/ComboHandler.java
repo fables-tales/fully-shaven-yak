@@ -70,7 +70,7 @@ public class ComboHandler {
 		mComboTimeRemaining = mStartComboTime;
 		ArrayList<String> build = new ArrayList<String>();
 		mHatSprites.clear();
-		for (int i = 0; i < 2; i++) {
+		for (int i = 0; i < GameRoot.services().constantManager().getInt("hats_in_combo"); i++) {
 			String color = HatGenerator.HAT_COLORS[random().nextInt(HatGenerator.HAT_COLORS.length)];
 			int index = HatGenerator.HAT_INDICES[random().nextInt(HatGenerator.HAT_INDICES.length)];
 			build.add(color + "_" + index);
