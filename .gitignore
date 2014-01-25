@@ -1,1 +1,4 @@
 *.class
+ggj2014-desktop/.gitignore
+ggj2014/bin
+ggj2014-html/war/WEB-INF
