@@ -56,12 +56,17 @@ public class GameRoot implements ApplicationListener {
         }
 
         createEnemies();
+        createWorldBounds();
         createListener();
 
         mDebugRenderer = new Box2DDebugRenderer();
     }
 
-    private void createEnemies() {
+    private void createWorldBounds() {
+    	new BoundaryCreator();
+	}
+
+	private void createEnemies() {
         for (int i = 0; i < mNEnemies; i++) {
             generateEnemy();
         }
@@ -97,8 +102,6 @@ public class GameRoot implements ApplicationListener {
 			actualProbability -= constants().getFloat(ENEMY_TYPES[i+1] + "_npc_probability");
 			i++;
 		}
-		
-		System.out.println("enemy type: " + i);
 		
 		String enemyType = ENEMY_TYPES[i];
 		int minHatCount = constants().getInt(enemyType + "_npc_hat_min");
