@@ -23,7 +23,14 @@ public class AnimationManager {
 	}
 	
 	public Sprite nextFrame() {
-		List<Sprite> currentAnim = mAnimations.get(mCurrentAnim);
-		return currentAnim.get((mCurrentFrame++) % currentAnim.size());
+		try {
+			List<Sprite> currentAnim = mAnimations.get(mCurrentAnim);
+			return currentAnim.get((mCurrentFrame++) % currentAnim.size());
+		} catch (NullPointerException npe) {
+			System.out.println("hi");
+		}
+		
+		return null;
+		
 	}
 }

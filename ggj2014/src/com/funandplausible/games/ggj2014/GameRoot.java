@@ -94,10 +94,20 @@ public class GameRoot implements ApplicationListener {
 
     private void generateEnemy() {
         float bounds = constants().getFloat("enemy_bounds");
-        boolean leftMovingEnemy = random().nextBoolean();
-        float initialX = leftMovingEnemy ? bounds + random().nextFloat() * 200
-                : -bounds - random().nextFloat() * 200;
-        float initialY = random().nextFloat() * bounds * 2 - bounds;
+        float initialType = random().nextFloat();
+        float initialX;
+        float initialY;
+        if (initialType < 1.0/3.0) {
+        	initialX = bounds + random().nextFloat() * 200;
+        	initialY = random().nextFloat() * bounds * 2 - bounds;
+        } else if (initialType < 2.0/3.0) {
+        	initialX = -(bounds + random().nextFloat() * 200);
+        	initialY = random().nextFloat() * bounds * 2 - bounds;
+        } else {
+        	initialX = 0;
+        	initialY = -bounds + random().nextFloat() * 200;
+        }
+
         List<Hat> hats = generateEnemyHats();
         EnemyEntity ee = new EnemyEntity(initialX, initialY, bounds,
                 hats, mPlayer);
