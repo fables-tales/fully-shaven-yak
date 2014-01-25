@@ -3,13 +3,11 @@ package com.funandplausible.games.ggj2014;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.badlogic.gdx.files.FileHandle;
-
 public class ConstantManager {
     private final Map<String, String> mValues = new HashMap<String, String>();
 
-    public ConstantManager(FileHandle internal) {
-        parseConstants(internal.readString());
+    public ConstantManager(String constantsText) {
+        parseConstants(constantsText);
     }
 
     public float getFloat(String key) {
