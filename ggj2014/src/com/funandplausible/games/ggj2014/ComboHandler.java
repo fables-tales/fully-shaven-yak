@@ -27,24 +27,18 @@ public class ComboHandler {
 	
 	public boolean tick() {
 		List<String> hatNames = currentHatNames();
-		System.out.println("hats: ");
-		for (String hn : currentHatNames()){
-			System.out.println(hn);
+
+		boolean allPresent = true;
+		for (String h : requiredHats()){
+			allPresent &= hatNames.remove(h);
 		}
 
-		System.out.println("hats required: ");
-		for (String hn : requiredHats()){
-			System.out.println(hn);
-		}
-
-
-		if (hatNames.containsAll(requiredHats())) {
+		if (allPresent) {
 			decayCombo();
 			newCombo();
 		} else {
 			tickCombo();
 		}
-		System.out.println(mComboTimeRemaining);
 		
 		if (comboTimeRemaining() < 0) {
 			return false;
@@ -66,7 +60,6 @@ public class ComboHandler {
 	}
 
 	private void newCombo() {
-		System.out.println("new combo");
 		mComboTimeRemaining = mStartComboTime;
 		ArrayList<String> build = new ArrayList<String>();
 		mHatSprites.clear();

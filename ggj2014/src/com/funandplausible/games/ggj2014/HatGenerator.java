@@ -11,13 +11,14 @@ import com.funandplausible.games.ggj2014.drawables.Hat;
 
 public class HatGenerator {
 	
-	public final static String[] HAT_COLORS = new String[] { "blue", "red" };
-	public final static int[] HAT_INDICES = new int[] {0, 1};
+	public final static String[] HAT_COLORS = new String[] { "blue", "red", "green" };
+	public final static int[] HAT_INDICES = new int[] {0, 1, 2};
 	private static final Map<String, Color> TINT_MAP = new HashMap<String, Color>();
 	
 	static {
 		TINT_MAP.put("blue", Color.BLUE);
 		TINT_MAP.put("red", Color.RED);
+		TINT_MAP.put("green", Color.GREEN);
 	}
 
     private final GameServices mServices;
@@ -41,7 +42,7 @@ public class HatGenerator {
 
         return result;
     }
-
+    
     private Hat nextHat() {
     	int availableHats = 0;
     	for (List<Hat> hs : mHatPool.values()) {
@@ -124,7 +125,7 @@ public class HatGenerator {
 	private Sprite hatSprite(int spriteIndex) {
         Sprite s = mServices.contentManager().loadSprite(
                 "hat" + spriteIndex + ".png");
-        s.setBounds(0, 0, 10, 10);
+        s.setBounds(0, 0, 30, 30);
         return s;
     }
 
