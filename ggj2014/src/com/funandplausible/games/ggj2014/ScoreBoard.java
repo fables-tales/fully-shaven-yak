@@ -10,7 +10,6 @@ public class ScoreBoard {
         mScore -= i;
         if (mScore < 0) {
             mScore = 0;
-            throw new IllegalStateException("cannot have negative points");
         }
     }
 
