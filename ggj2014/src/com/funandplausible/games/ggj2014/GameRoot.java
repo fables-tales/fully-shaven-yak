@@ -81,8 +81,8 @@ public class GameRoot implements ApplicationListener {
         float initialY = random().nextFloat() * bounds * 2 - bounds;
         float initialVelocityX = leftMovingEnemy ? -enemySpeed : enemySpeed;
         List<Hat> hats = generateEnemyHats();
-        EnemyEntity ee = new EnemyEntity(initialX, initialY, initialVelocityX,
-                bounds, hats, mPlayer);
+        EnemyEntity ee = new EnemyEntity(initialX, initialY, bounds,
+                hats, mPlayer);
         mUpdateables.addAll(hats);
         mDrawables.addAll(hats);
         mEnemyEntities.add(ee);
