@@ -88,12 +88,10 @@ public class GameRoot implements ApplicationListener {
 
     private void generateEnemy() {
         float bounds = constants().getFloat("enemy_bounds");
-        float enemySpeed = constants().getFloat("enemy_speed");
         boolean leftMovingEnemy = random().nextBoolean();
         float initialX = leftMovingEnemy ? bounds + random().nextFloat() * 200
                 : -bounds - random().nextFloat() * 200;
         float initialY = random().nextFloat() * bounds * 2 - bounds;
-        float initialVelocityX = leftMovingEnemy ? -enemySpeed : enemySpeed;
         List<Hat> hats = generateEnemyHats();
         EnemyEntity ee = new EnemyEntity(initialX, initialY, bounds,
                 hats, mPlayer);

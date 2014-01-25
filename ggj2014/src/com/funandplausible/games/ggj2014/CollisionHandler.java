@@ -30,10 +30,10 @@ public class CollisionHandler {
             HatInteractor a = (HatInteractor) fixtureA.getUserData();
             HatInteractor b = (HatInteractor) fixtureB.getUserData();
 
-            if (a.hatCount() > b.hatCount()) {
+            if (a.hatCount() < b.hatCount()) {
                 a.winInteraction(b);
                 b.loseInteraction(a);
-            } else if (b.hatCount() > a.hatCount()) {
+            } else if (b.hatCount() < a.hatCount()) {
                 b.winInteraction(a);
                 a.loseInteraction(b);
             }
