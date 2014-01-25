@@ -37,6 +37,7 @@ public class Hat extends Drawable implements Updateable {
         FixtureDef ballFixtureDef = new FixtureDef();
         ballFixtureDef.shape = ps;
         ballFixtureDef.density = 1;
+        ballFixtureDef.isSensor = true;
 
         // Create a ball
         ballBody = gs.world().createBody(ballBodyDef);
