@@ -182,8 +182,23 @@ public class GameRoot implements ApplicationListener {
         }
 
         Vector2 playerPosition = mPlayer.position();
-        camera().position.x = playerPosition.x;
-        camera().position.y = playerPosition.y;
+        float cameraX = playerPosition.x, cameraY = playerPosition.y;
+        float cameraBoundX = sServices.constantManager().getFloat("camera_bound_x");
+        float cameraBoundY = sServices.constantManager().getFloat("camera_bound_y");
+        if (cameraX < -cameraBoundX) {
+        	cameraX = -cameraBoundX;
+        }
+        if (cameraY < -cameraBoundY) {
+        	cameraY = -cameraBoundY;
+        }
+        if (cameraX > cameraBoundX) {
+        	cameraX = cameraBoundX;
+        }
+        if (cameraY > cameraBoundY) {
+        	cameraY = cameraBoundY;
+        }
+        camera().position.x = cameraX;
+        camera().position.y = cameraY;
         camera().update();
 
     }
