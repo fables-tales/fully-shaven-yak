@@ -21,11 +21,11 @@ low_hat_npc_probability|float|0.9
 med_hat_npc_probability|float|0.4
 high_hat_npc_probability|float|0.3
 low_hat_npc_hat_min|int|1
-low_hat_npc_hat_max|int|2
-med_hat_npc_hat_min|int|1
-med_hat_npc_hat_max|int|2
-high_hat_npc_hat_min|int|1
-high_hat_npc_hat_max|int|2
+low_hat_npc_hat_max|int|3
+med_hat_npc_hat_min|int|2
+med_hat_npc_hat_max|int|5
+high_hat_npc_hat_min|int|4
+high_hat_npc_hat_max|int|7
 first_combo_time|float|100
 combo_time_decay|float|0.9
 hats_in_combo|int|3
