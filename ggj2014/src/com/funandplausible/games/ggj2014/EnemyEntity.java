@@ -17,9 +17,6 @@ import com.funandplausible.games.ggj2014.drawables.Hat;
 import com.funandplausible.games.ggj2014.drawables.SpriteDrawable;
 
 public class EnemyEntity extends Drawable implements Updateable, HatInteractor {
-
-    private final float mX;
-    private final float mY;
     private final float mVelocityX;
     private PhysicsSprite mSprite;
     private final Stack<Hat> mHats;
@@ -29,16 +26,14 @@ public class EnemyEntity extends Drawable implements Updateable, HatInteractor {
 
     public EnemyEntity(float initialX, float initialY, float initialVelocityX,
             float bounds, List<Hat> hats, HatInteractor player) {
-        mX = initialX;
-        mY = initialY;
         mVelocityX = initialVelocityX;
         mHats = new Stack<Hat>();
         mHats.addAll(hats);
         mPlayer = player;
-        setupPhysicsSprite();
+        setupPhysicsSprite(initialX, initialY);
     }
 
-    private void setupPhysicsSprite() {
+    private void setupPhysicsSprite(float x, float y) {
         // Define a body for the ball
         Body ballBody;
 
@@ -46,7 +41,7 @@ public class EnemyEntity extends Drawable implements Updateable, HatInteractor {
         Fixture ballFixture;
         BodyDef ballBodyDef = new BodyDef();
         ballBodyDef.type = BodyType.DynamicBody;
-        ballBodyDef.position.set(mX / GameServices.PIXELS_PER_METER, mY
+        ballBodyDef.position.set(x / GameServices.PIXELS_PER_METER, y
                 / GameServices.PIXELS_PER_METER);
         ballBodyDef.fixedRotation = true;
 
