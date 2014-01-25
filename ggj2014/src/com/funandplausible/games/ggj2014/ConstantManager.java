@@ -36,7 +36,6 @@ public class ConstantManager {
 
         for (int i = 1; i < lines.length; i++) {
             String line = lines[i];
-            System.out.println(line);
             addConstantFromLine(line.split("\\|"));
         }
     }

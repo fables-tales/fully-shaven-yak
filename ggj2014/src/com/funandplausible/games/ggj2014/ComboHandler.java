@@ -27,16 +27,6 @@ public class ComboHandler {
 	
 	public boolean tick() {
 		List<String> hatNames = currentHatNames();
-		System.out.println("hats: ");
-		for (String hn : currentHatNames()){
-			System.out.println(hn);
-		}
-
-		System.out.println("hats required: ");
-		for (String hn : requiredHats()){
-			System.out.println(hn);
-		}
-
 
 		if (hatNames.containsAll(requiredHats())) {
 			decayCombo();
@@ -44,7 +34,6 @@ public class ComboHandler {
 		} else {
 			tickCombo();
 		}
-		System.out.println(mComboTimeRemaining);
 		
 		if (comboTimeRemaining() < 0) {
 			return false;
