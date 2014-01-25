@@ -17,11 +17,12 @@ import com.funandplausible.games.ggj2014.drawables.Drawable;
 import com.funandplausible.games.ggj2014.drawables.Hat;
 import com.funandplausible.games.ggj2014.drawables.SpriteDrawable;
 
-public class PlayerEntity extends Drawable implements Updateable, HatInteractor, HatCollector {
+public class PlayerEntity extends Drawable implements Updateable,
+        HatInteractor, HatCollector {
     private PhysicsSprite mSprite = null;
     private final float mPlayerSpeed;
     private final Stack<Hat> mHats = new Stack<Hat>();
-	private AnimationManager mAnimationManager;
+    private final AnimationManager mAnimationManager;
 
     public PlayerEntity() {
         // Define a body for the ball
@@ -51,13 +52,14 @@ public class PlayerEntity extends Drawable implements Updateable, HatInteractor,
         ballFixture.setUserData(this);
         ballBody.setUserData(this);
 
-        Sprite s = GameRoot.services().contentManager().loadSprite("walk_down_0.png");
-        s.setBounds(0, 0, 75/1.844f, 75);
+        Sprite s = GameRoot.services().contentManager()
+                .loadSprite("walk_down_0.png");
+        s.setBounds(0, 0, 75 / 1.844f, 75);
         mAnimationManager = new AnimationManager();
-        loadAnimation("walk_down",0,1);
-        loadAnimation("walk_up",0,1);
-        loadAnimation("walk_left",0,1);
-        loadAnimation("walk_right",0,1);
+        loadAnimation("walk_down", 0, 1);
+        loadAnimation("walk_up", 0, 1);
+        loadAnimation("walk_left", 0, 1);
+        loadAnimation("walk_right", 0, 1);
         SpriteDrawable sd = new SpriteDrawable(s, 1000);
         mSprite = new PhysicsSprite(sd, ballBody, ballFixture);
         mPlayerSpeed = GameRoot.services().constantManager()
@@ -65,36 +67,45 @@ public class PlayerEntity extends Drawable implements Updateable, HatInteractor,
     }
 
     private void loadAnimation(String string, int start_frame, int end_frame) {
-    	List<Sprite> frames = new ArrayList<Sprite>();
-    	for (int i = start_frame; i < end_frame; i++) {
-    		Sprite s = GameRoot.services().contentManager().loadSprite(string + "_" + i + ".png");
-    		s.setBounds(0, 0, 75/1.844f, 75);
-    		frames.add(s);
-    	}
-    	
-    	mAnimationManager.addAnimation(string, frames);
-	}
+        List<Sprite> frames = new ArrayList<Sprite>();
+        for (int i = start_frame; i < end_frame; i++) {
+            Sprite s = GameRoot.services().contentManager()
+                    .loadSprite(string + "_" + i + ".png");
+            s.setBounds(0, 0, 75 / 1.844f, 75);
+            frames.add(s);
+        }
 
-	@Override
+        mAnimationManager.addAnimation(string, frames);
+    }
+
+    @Override
     public void update() {
         mSprite.body().setLinearVelocity(inputVector().scl(mPlayerSpeed));
         mSprite.update();
-        
+
         String anim = "walk_down";
 
-        if (inputVector().x < 0) {
-        	anim = "walk_left";
-        } else if (inputVector().x > 0) {
-        	anim = "walk_right";
+        Vector2 vel = mSprite.body().getLinearVelocity();
+
+        if (vel.x < 0) {
+            anim = "walk_left";
+        } else if (vel.x > 0) {
+            anim = "walk_right";
         }
 
-        if (inputVector().y < 0) {
-        	anim = "walk_down";
-        } else if (inputVector().y > 0) {
-        	anim = "walk_up";
+        if (vel.y < 0) {
+            anim = "walk_down";
+        } else if (vel.y > 0) {
+            anim = "walk_up";
         }
-        
+
         mAnimationManager.startAnimation(anim);
+
+        int i = 0;
+        for (Hat h : mHats) {
+            h.setPosition(position().x, position().y + 50 + i * 10);
+            i++;
+        }
     }
 
     private float centerY() {
@@ -116,14 +127,10 @@ public class PlayerEntity extends Drawable implements Updateable, HatInteractor,
 
     @Override
     public void draw(SpriteBatch sb) {
-    	Sprite s = mAnimationManager.nextFrame();
-    	s.setPosition(mSprite.position().x-(75/(2*1.844f)), mSprite.position().y-75/2);
+        Sprite s = mAnimationManager.nextFrame();
+        s.setPosition(mSprite.position().x - 75 / (2 * 1.844f),
+                mSprite.position().y - 75 / 2);
         s.draw(sb);
-        int i = 0;
-        for (Hat h : mHats) {
-        	h.setPosition(position().x, position().y+50+i*10);
-        	i++;
-        }
     }
 
     private Vector2 inputVector() {
@@ -168,15 +175,15 @@ public class PlayerEntity extends Drawable implements Updateable, HatInteractor,
         return mHats;
     }
 
-	@Override
-	public void receiveHat(Hat hat) {
-		if (hatCount() < 10) {
-			pushHat(hat);
-		}
-	}
-	
-	@Override
-	public boolean isNPC() {
-		return false;
-	}
+    @Override
+    public void receiveHat(Hat hat) {
+        if (hatCount() < 10) {
+            pushHat(hat);
+        }
+    }
+
+    @Override
+    public boolean isNPC() {
+        return false;
+    }
 }
