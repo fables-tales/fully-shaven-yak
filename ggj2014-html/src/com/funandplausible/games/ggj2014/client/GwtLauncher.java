@@ -17,6 +17,10 @@ public class GwtLauncher extends GwtApplication {
     @Override
     public ApplicationListener getApplicationListener() {
         Content.setPrefix("");
-        return new GameRoot();
+        return new GameRoot(getConstants());
     }
+    
+    public native String getConstants() /*-{
+    	return constants;
+    }-*/;
 }

@@ -25,12 +25,12 @@ public class GameServices {
     public static final Vector2 GRAVITY_VECTOR = new Vector2(0.0f, 0.0f);
     public static final int PIXELS_PER_METER = 32;
 
-    public GameServices() {
+    public GameServices(String constantsText) {
         mCamera = makeCamera();
         mMainSpriteBatch = makeSpriteBatch();
         mUISpriteBatch = makeSpriteBatch();
         mContentManager = makeContentManager();
-        mConstantManager = makeConstantManager();
+        mConstantManager = makeConstantManager(constantsText);
         mWorld = makeWorld();
         mInputManager = makeInputManager();
         mRandom = makeRandom();
@@ -103,8 +103,8 @@ public class GameServices {
         return new World(GRAVITY_VECTOR, true);
     }
 
-    private ConstantManager makeConstantManager() {
-        return new ConstantManager(Content.file("constants.txt"));
+    private ConstantManager makeConstantManager(String constantsText) {
+        return new ConstantManager(constantsText);
     }
 
     private InputManager makeInputManager() {

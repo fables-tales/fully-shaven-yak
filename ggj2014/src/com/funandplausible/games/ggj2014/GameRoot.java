@@ -27,8 +27,14 @@ public class GameRoot implements ApplicationListener {
     private static final int STATE_MAIN = 0x01;
 	private static final int STATE_GAME_OVER = 0x02;
     private static final String[] ENEMY_TYPES = new String[] { "low_hat", "med_hat", "high_hat" };
+    
+    private String mConstantsText;
 
-    public static GameServices services() {
+    public GameRoot(String constants) {
+    	mConstantsText = constants;
+	}
+
+	public static GameServices services() {
         return sServices;
     }
 
@@ -44,7 +50,7 @@ public class GameRoot implements ApplicationListener {
 
     @Override
     public void create() {
-        GameRoot.sServices = new GameServices();
+        GameRoot.sServices = new GameServices(mConstantsText);
         mDrawables = new ArrayList<Drawable>();
         mUpdateables = new HashSet<Updateable>();
         mEnemyEntities = new ArrayList<EnemyEntity>();
