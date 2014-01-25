@@ -12,7 +12,7 @@ import com.funandplausible.games.ggj2014.drawables.Hat;
 public class HatGenerator {
 	
 	public final static String[] HAT_COLORS = new String[] { "blue", "red", "green", "white", "black" };
-	public final static int[] HAT_INDICES = new int[] {0, 1, 2};
+	public final static int[] HAT_INDICES = new int[] {1,1,1,1,1};
 	private static final Map<String, Color> TINT_MAP = new HashMap<String, Color>();
 	
 	static {
