@@ -124,7 +124,7 @@ public class PlayerEntity extends Drawable implements Updateable, HatInteractor 
     public void winInteraction(HatInteractor other) {
         System.out.println("won interaction");
         GameRoot.services().scoreBoard().winPoints(10);
-        if (other.hatCount() > 0) {
+        if (other.hatCount() > 0 && mHats.size() < 10) {
             mHats.add(other.getHats().pop());
         }
     }

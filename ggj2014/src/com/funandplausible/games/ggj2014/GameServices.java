@@ -12,6 +12,7 @@ import com.badlogic.gdx.physics.box2d.World;
 public class GameServices {
     private Camera mCamera = null;
     private SpriteBatch mMainSpriteBatch = null;
+    private SpriteBatch mUISpriteBatch;
     private ContentManager mContentManager = null;
     private World mWorld = null;
     private ConstantManager mConstantManager = null;
@@ -27,6 +28,7 @@ public class GameServices {
     public GameServices() {
         mCamera = makeCamera();
         mMainSpriteBatch = makeSpriteBatch();
+        mUISpriteBatch = makeSpriteBatch();
         mContentManager = makeContentManager();
         mConstantManager = makeConstantManager();
         mWorld = makeWorld();
@@ -124,4 +126,8 @@ public class GameServices {
     public ScoreBoard scoreBoard() {
         return mScoreBoard;
     }
+
+	public SpriteBatch uiSpriteBatch() {
+		return mUISpriteBatch;
+	}
 }

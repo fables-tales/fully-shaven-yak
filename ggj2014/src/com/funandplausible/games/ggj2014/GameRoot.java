@@ -12,6 +12,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.GL10;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector2;
@@ -24,6 +25,7 @@ public class GameRoot implements ApplicationListener {
 
     private static GameServices sServices;
     private static final int STATE_MAIN = 0x01;
+	private static final int STATE_GAME_OVER = 0x02;
     private static final String[] ENEMY_TYPES = new String[] { "low_hat", "med_hat", "high_hat" };
 
     public static GameServices services() {
@@ -37,6 +39,8 @@ public class GameRoot implements ApplicationListener {
     private PlayerEntity mPlayer;
     private List<EnemyEntity> mEnemyEntities;
     private int mNEnemies;
+	private ComboHandler mComboHandler;
+	private Sprite mGameOverSprite;
 
     @Override
     public void create() {
@@ -45,6 +49,7 @@ public class GameRoot implements ApplicationListener {
         mUpdateables = new HashSet<Updateable>();
         mEnemyEntities = new ArrayList<EnemyEntity>();
         mNEnemies = constants().getInt("n_enemies");
+        mGameOverSprite = services().contentManager().loadSprite("lose.png");
 
         mState = STATE_MAIN;
 
@@ -54,12 +59,21 @@ public class GameRoot implements ApplicationListener {
         if (constants().getBoolean("spawn_hats_on_floor")) {
         	createHats();
         }
+        
+		HatGenerator hg = services().hatGenerator();
+        List<Hat> hats = hg.generateHats(2);
 
         createEnemies();
         createWorldBounds();
         createListener();
 
+        mComboHandler = new ComboHandler(mPlayer);
         mDebugRenderer = new Box2DDebugRenderer();
+        mPlayer.getHats().addAll(hats);
+        for (Hat h : hats) {
+        	mDrawables.add(h);
+        	mUpdateables.add(h);
+        }
     }
 
     private void createWorldBounds() {
@@ -76,8 +90,8 @@ public class GameRoot implements ApplicationListener {
         float bounds = constants().getFloat("enemy_bounds");
         float enemySpeed = constants().getFloat("enemy_speed");
         boolean leftMovingEnemy = random().nextBoolean();
-        float initialX = leftMovingEnemy ? bounds + random().nextFloat() * 1000
-                : -bounds - random().nextFloat() * 1000;
+        float initialX = leftMovingEnemy ? bounds + random().nextFloat() * 200
+                : -bounds - random().nextFloat() * 200;
         float initialY = random().nextFloat() * bounds * 2 - bounds;
         float initialVelocityX = leftMovingEnemy ? -enemySpeed : enemySpeed;
         List<Hat> hats = generateEnemyHats();
@@ -92,6 +106,7 @@ public class GameRoot implements ApplicationListener {
 
 	private List<Hat> generateEnemyHats() {
 		float totalProbability = 0;
+
 		for (String et : ENEMY_TYPES) {
 			totalProbability += constants().getFloat(et + "_npc_probability");
 		}
@@ -133,10 +148,22 @@ public class GameRoot implements ApplicationListener {
             updateMain();
             clear();
             drawMain();
+        } else if (mState == STATE_GAME_OVER) {
+        	if (Gdx.input.isKeyPressed(Keys.R)) {
+        		create();
+        	}
+        	clear();
+        	drawGameOver();
         }
     }
 
-    private void updateMain() {
+    private void drawGameOver() {
+    	uiSpriteBatch().begin();
+    	mGameOverSprite.draw(uiSpriteBatch());
+    	uiSpriteBatch().end();
+	}
+
+	private void updateMain() {
         Vector2 oldPlayerPosition = new Vector2(mPlayer.position());
         stepPhysics();
         dropAllHats();
@@ -146,6 +173,10 @@ public class GameRoot implements ApplicationListener {
         }
 
         removeDeadEnemies();
+        boolean comboResult = mComboHandler.tick();
+        if (comboResult == false) {
+        	mState = STATE_GAME_OVER;
+        }
 
         Vector2 playerPosition = mPlayer.position();
         camera().translate(playerPosition.x - oldPlayerPosition.x,
@@ -202,14 +233,23 @@ public class GameRoot implements ApplicationListener {
             d.draw(mainSpriteBatch());
         }
         mainSpriteBatch().end();
-        if (services().constantManager().getBoolean("debug_physics")) {
+        drawDebugPhysics();
+        
+        uiSpriteBatch().begin();
+        mComboHandler.draw(uiSpriteBatch());
+        uiSpriteBatch().end();
+        
+    }
+
+	private void drawDebugPhysics() {
+		if (services().constantManager().getBoolean("debug_physics")) {
             mDebugRenderer.render(
                     services().world(),
                     services().camera().combined.cpy().scale(
                             GameServices.PIXELS_PER_METER,
                             GameServices.PIXELS_PER_METER, 1));
         }
-    }
+	}
 
     @Override
     public void resize(int width, int height) {
@@ -225,6 +265,10 @@ public class GameRoot implements ApplicationListener {
 
     private SpriteBatch mainSpriteBatch() {
         return services().mainSpriteBatch();
+    }
+
+    private SpriteBatch uiSpriteBatch() {
+        return services().uiSpriteBatch();
     }
 
     private Camera camera() {

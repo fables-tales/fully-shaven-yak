@@ -45,7 +45,9 @@ public class CollisionHandler {
             Hat h = (Hat) fixtureB.getUserData();
             PlayerEntity p = (PlayerEntity) fixtureA.getUserData();
             h.disarm();
-            p.pushHat(h);
+            if (p.hatCount() < 10) {
+            	p.pushHat(h);
+            }
         }
     }
 

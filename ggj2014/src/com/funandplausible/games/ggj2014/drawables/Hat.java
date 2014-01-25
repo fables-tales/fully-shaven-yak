@@ -19,8 +19,10 @@ public class Hat extends Drawable implements Updateable {
 
     private final PhysicsSprite mSprite;
     private final Fixture mFixture;
+    private String mKey;
 
-    public Hat(Sprite s, Color color, GameServices gs) {
+    public Hat(Sprite s, Color color, String key, GameServices gs) {
+    	mKey = key;
         // Define a body for the ball
         Body ballBody;
 
@@ -73,6 +75,10 @@ public class Hat extends Drawable implements Updateable {
     @Override
     public void update() {
         mSprite.update();
+    }
+    
+    public String key() {
+    	return mKey;
     }
 
     public void rearm() {
