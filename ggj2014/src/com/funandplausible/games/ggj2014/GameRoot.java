@@ -6,6 +6,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
@@ -236,15 +238,35 @@ public class GameRoot implements ApplicationListener {
     private void stepPhysics() {
         services().world().step((float) (60 / 1000.0), 3, 3);
     }
+    
+    private boolean mAllowSinglePop = true;
 
     private void dropAllHats() {
         if (Gdx.input.isKeyPressed(Keys.SPACE)) {
-            List<Hat> playersHats = mPlayer.popAllHats();
-            for (Hat h : playersHats) {
-                h.setLoose();
-            }
+        	List<Hat> playersHats;
 
-            services().hatDistributor().distributeHats(playersHats);
+        	if (services().constantManager().getBoolean("drop_single_hat")) {
+        		playersHats = new ArrayList<Hat>();
+        		if (mPlayer.hatCount() > 0 && mAllowSinglePop) {
+        			mAllowSinglePop = false;
+        			playersHats.add(mPlayer.getHats().pop());
+        			new Timer().schedule(new TimerTask() {
+					
+        				@Override
+        				public void run() {
+        					mAllowSinglePop = true;
+        				}
+        			}, 500);
+        		}
+        	} else {
+        		playersHats = mPlayer.popAllHats();
+        	}
+
+        	for (Hat h : playersHats) {
+        		h.setLoose();
+        	}
+        	
+        	services().hatDistributor().distributeHats(playersHats);
         }
     }
 
