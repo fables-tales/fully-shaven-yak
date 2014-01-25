@@ -31,6 +31,10 @@ public class CollisionHandler {
                 && fixtureB.getUserData() instanceof HatInteractor) {
             HatInteractor a = (HatInteractor) fixtureA.getUserData();
             HatInteractor b = (HatInteractor) fixtureB.getUserData();
+            
+            if (a.isNPC() && b.isNPC()) {
+            	return;
+            }
 
             int hatCountA = a.hatCount();
 			int hatCountB = b.hatCount();

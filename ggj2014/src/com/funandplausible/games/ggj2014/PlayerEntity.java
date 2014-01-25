@@ -139,4 +139,9 @@ public class PlayerEntity extends Drawable implements Updateable, HatInteractor,
 			pushHat(hat);
 		}
 	}
+	
+	@Override
+	public boolean isNPC() {
+		return false;
+	}
 }

@@ -175,6 +175,11 @@ public class EnemyEntity extends Drawable implements Updateable, HatInteractor, 
             mHats.push(other.getHats().pop());
         }
     }
+    
+    @Override
+    public boolean isNPC() {
+    	return true;
+    }
 
     @Override
     public Stack<Hat> getHats() {

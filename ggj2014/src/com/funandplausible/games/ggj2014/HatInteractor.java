@@ -12,4 +12,6 @@ public interface HatInteractor {
     public void winInteraction(HatInteractor other);
 
     public Stack<Hat> getHats();
+    
+    public boolean isNPC();
 }
