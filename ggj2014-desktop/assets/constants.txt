@@ -1,5 +1,5 @@
 name|type|value
-debug_physics|bool|true
+debug_physics|bool|false
 player_speed|float|4.0
 hat_spawn_size|float|1500
 initial_hats|int|20
@@ -23,9 +23,9 @@ red_0_hat_probability|float|0.5
 green_2_hat_probability|float|0.9
 green_1_hat_probability|float|0.7
 green_0_hat_probability|float|0.5
-low_hat_npc_probability|float|0.5
+low_hat_npc_probability|float|0.3
 med_hat_npc_probability|float|0.5
-high_hat_npc_probability|float|0.5
+high_hat_npc_probability|float|0.7
 low_hat_npc_hat_min|int|1
 low_hat_npc_hat_max|int|3
 med_hat_npc_hat_min|int|3
