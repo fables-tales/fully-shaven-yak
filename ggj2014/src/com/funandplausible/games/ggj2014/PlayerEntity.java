@@ -85,15 +85,17 @@ public class PlayerEntity extends Drawable implements Updateable,
 
         String anim = "walk_down";
 
-        if (inputVector().x < 0) {
+        Vector2 vel = mSprite.body().getLinearVelocity();
+
+        if (vel.x < 0) {
             anim = "walk_left";
-        } else if (inputVector().x > 0) {
+        } else if (vel.x > 0) {
             anim = "walk_right";
         }
 
-        if (inputVector().y < 0) {
+        if (vel.y < 0) {
             anim = "walk_down";
-        } else if (inputVector().y > 0) {
+        } else if (vel.y > 0) {
             anim = "walk_up";
         }
 
