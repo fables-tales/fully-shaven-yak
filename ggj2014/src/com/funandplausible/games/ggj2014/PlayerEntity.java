@@ -21,6 +21,7 @@ public class PlayerEntity extends Drawable implements Updateable, HatInteractor 
     private PhysicsSprite mSprite = null;
     private final float mPlayerSpeed;
     private final Stack<Hat> mHats = new Stack<Hat>();
+	private AnimationManager mAnimationManager;
 
     public PlayerEntity() {
         // Define a body for the ball
@@ -50,18 +51,50 @@ public class PlayerEntity extends Drawable implements Updateable, HatInteractor 
         ballFixture.setUserData(this);
         ballBody.setUserData(this);
 
-        Sprite s = GameRoot.services().contentManager().loadSprite("bees.png");
-        s.setBounds(0, 0, 75, 75);
+        Sprite s = GameRoot.services().contentManager().loadSprite("walk_down_0.png");
+        s.setBounds(0, 0, 75, 75*1.844f);
+        mAnimationManager = new AnimationManager();
+        loadAnimation("walk_down",0,1);
+        loadAnimation("walk_up",0,1);
+        loadAnimation("walk_left",0,1);
+        loadAnimation("walk_right",0,1);
         SpriteDrawable sd = new SpriteDrawable(s, 1000);
         mSprite = new PhysicsSprite(sd, ballBody, ballFixture);
         mPlayerSpeed = GameRoot.services().constantManager()
                 .getFloat("player_speed");
     }
 
-    @Override
+    private void loadAnimation(String string, int start_frame, int end_frame) {
+    	List<Sprite> frames = new ArrayList<Sprite>();
+    	for (int i = start_frame; i < end_frame; i++) {
+    		Sprite s = GameRoot.services().contentManager().loadSprite(string + "_" + i + ".png");
+    		s.setBounds(0, 0, 75, 75*1.844f);
+    		frames.add(s);
+    	}
+    	
+    	mAnimationManager.addAnimation(string, frames);
+	}
+
+	@Override
     public void update() {
         mSprite.body().setLinearVelocity(inputVector().scl(mPlayerSpeed));
         mSprite.update();
+        
+        String anim = "walk_down";
+
+        if (inputVector().x < 0) {
+        	anim = "walk_left";
+        } else if (inputVector().x > 0) {
+        	anim = "walk_right";
+        }
+
+        if (inputVector().y < 0) {
+        	anim = "walk_down";
+        } else if (inputVector().y > 0) {
+        	anim = "walk_up";
+        }
+        
+        mAnimationManager.startAnimation(anim);
     }
 
     private float centerY() {
@@ -83,12 +116,9 @@ public class PlayerEntity extends Drawable implements Updateable, HatInteractor 
 
     @Override
     public void draw(SpriteBatch sb) {
-        int i = 0;
-        for (Hat h : mHats) {
-            i++;
-            h.setPosition(centerX(), centerY() + 50 + i * 15);
-        }
-        mSprite.draw(sb);
+    	Sprite s = mAnimationManager.nextFrame();
+    	s.setPosition(mSprite.position().x, mSprite.position().y);
+        s.draw(sb);
     }
 
     private Vector2 inputVector() {
