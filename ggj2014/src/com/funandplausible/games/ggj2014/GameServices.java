@@ -86,7 +86,7 @@ public class GameServices {
 	}
 	
 	private ConstantManager makeConstantManager() {
-		return new ConstantManager(Gdx.files.internal("constants.txt"));
+		return new ConstantManager(Gdx.files.internal("assets/constants.txt"));
 	}
 	
 	private InputManager makeInputManager() {
