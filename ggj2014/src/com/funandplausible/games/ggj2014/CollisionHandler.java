@@ -9,15 +9,20 @@ public class CollisionHandler {
     }
 
     public void checkPlayerHat(Fixture fixtureA, Fixture fixtureB) {
-        if (fixtureA.getUserData() instanceof PlayerEntity
+        if (fixtureA.getUserData() instanceof HatCollector
                 && fixtureB.getUserData() instanceof Hat) {
             Hat h = (Hat) fixtureB.getUserData();
-            PlayerEntity p = (PlayerEntity) fixtureA.getUserData();
-            h.disarm();
-            System.out.println(p.hatCount());
-            if (p.hatCount() < 10) {
-            	p.pushHat(h);
-            }
+            HatCollector c = (HatCollector) fixtureA.getUserData();
+            h.setBound();
+            c.receiveHat(h);
+            System.err.println(c + " picks up hat");
+        }
+        if (fixtureA.getUserData() instanceof Hat && fixtureB.getUserData() instanceof Hat) {
+        	Hat h = (Hat) fixtureA.getUserData();
+            HatCollector c = (HatCollector) fixtureB.getUserData();
+            h.setBound();
+            c.receiveHat(h);
+            System.err.println(c + " picks up hat");
         }
     }
 
@@ -27,10 +32,14 @@ public class CollisionHandler {
             HatInteractor a = (HatInteractor) fixtureA.getUserData();
             HatInteractor b = (HatInteractor) fixtureB.getUserData();
 
-            if (a.hatCount() > b.hatCount()) {
+            int hatCountA = a.hatCount();
+			int hatCountB = b.hatCount();
+			if (hatCountA < hatCountB) {
+            	System.err.println(a + " takes hat from " + b + " [C1]");
                 a.winInteraction(b);
                 b.loseInteraction(a);
-            } else if (b.hatCount() > a.hatCount()) {
+            } else if (hatCountB < hatCountA) {
+            	System.err.println(b + " takes hat from " + a + " [C2]");
                 b.winInteraction(a);
                 a.loseInteraction(b);
             }

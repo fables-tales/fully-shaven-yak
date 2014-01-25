@@ -17,7 +17,7 @@ import com.funandplausible.games.ggj2014.drawables.Drawable;
 import com.funandplausible.games.ggj2014.drawables.Hat;
 import com.funandplausible.games.ggj2014.drawables.SpriteDrawable;
 
-public class PlayerEntity extends Drawable implements Updateable, HatInteractor {
+public class PlayerEntity extends Drawable implements Updateable, HatInteractor, HatCollector {
     private PhysicsSprite mSprite = null;
     private final float mPlayerSpeed;
     private final Stack<Hat> mHats = new Stack<Hat>();
@@ -162,4 +162,11 @@ public class PlayerEntity extends Drawable implements Updateable, HatInteractor 
     public Stack<Hat> getHats() {
         return mHats;
     }
+
+	@Override
+	public void receiveHat(Hat hat) {
+		if (hatCount() < 10) {
+			pushHat(hat);
+		}
+	}
 }
