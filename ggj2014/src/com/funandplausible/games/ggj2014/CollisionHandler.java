@@ -16,6 +16,7 @@ public class CollisionHandler {
 				Fixture fixtureA = contact.getFixtureA();
 				Fixture fixtureB = contact.getFixtureB();
 				checkPlayerHat(fixtureA, fixtureB);
+				checkHatInteractors(fixtureA, fixtureB);
 			}
 
 			@Override
@@ -41,9 +42,26 @@ public class CollisionHandler {
 	private void checkPlayerHat(Fixture fixtureA, Fixture fixtureB) {
 		if (fixtureA.getUserData() instanceof PlayerEntity && fixtureB.getUserData() instanceof Hat) {
 			Hat h = (Hat) fixtureB.getUserData();
+			System.out.println(h.position());
 			PlayerEntity p = (PlayerEntity) fixtureA.getUserData();
 			h.disarm();
 			p.pushHat(h);
 		}
 	}
+
+	private void checkHatInteractors(Fixture fixtureA, Fixture fixtureB) {
+		if (fixtureA.getUserData() instanceof HatInteractor && fixtureB.getUserData() instanceof HatInteractor) {
+			HatInteractor a = (HatInteractor) fixtureA.getUserData();
+			HatInteractor b = (HatInteractor) fixtureB.getUserData();
+			
+			if (a.hatCount() > b.hatCount()) {
+				a.winInteraction(b);
+				b.loseInteraction(a);
+			} else if (b.hashCode() > a.hatCount()) {
+				b.winInteraction(a);
+				a.loseInteraction(b);
+			}
+		}
+	}
+
 }

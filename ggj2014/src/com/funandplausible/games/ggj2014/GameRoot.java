@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Random;
 import java.util.Set;
 
 import com.badlogic.gdx.ApplicationListener;
@@ -33,20 +34,53 @@ public class GameRoot implements ApplicationListener {
 	private int mState;
 	private Box2DDebugRenderer mDebugRenderer;
 	private PlayerEntity mPlayer;
+	private List<EnemyEntity> mEnemyEntities;
+	private int mNEnemies;
 
 	@Override
 	public void create() {		
 		GameRoot.sServices = new GameServices();
 		mDrawables = new ArrayList<Drawable>();
 		mUpdateables = new HashSet<Updateable>();
+		mEnemyEntities = new ArrayList<EnemyEntity>();
+		mNEnemies = constants().getInt("n_enemies");
+		
 		mState = STATE_MAIN;
 
 		createPlayer();
 		createBackground();
 		createHats();
+		createEnemies();
 		createListener();
 
 		mDebugRenderer = new Box2DDebugRenderer();
+	}
+
+	private void createEnemies() {
+		for (int i = 0; i < mNEnemies; i++) {
+			generateEnemy();
+		}
+	}
+
+	private void generateEnemy() {
+		float bounds = constants().getFloat("enemy_bounds");
+		float enemySpeed = constants().getFloat("enemy_speed");
+		boolean leftMovingEnemy = random().nextBoolean();
+		float initialX = leftMovingEnemy ? bounds : -bounds;
+		float initialY = random().nextFloat()*bounds*2-bounds;
+		float initialVelocityX = leftMovingEnemy ? -enemySpeed : enemySpeed;
+		HatGenerator hg = services().hatGenerator();
+		List<Hat> hats = hg.generateHats(3);
+		EnemyEntity ee = new EnemyEntity(initialX, initialY, initialVelocityX, bounds, hats);
+		mUpdateables.addAll(hats);
+		mDrawables.addAll(hats);
+		mEnemyEntities.add(ee);
+		mUpdateables.add(ee);
+		mDrawables.add(ee);
+	}
+
+	private Random random() {
+		return services().random();
 	}
 
 	private void createPlayer() {
@@ -146,7 +180,7 @@ public class GameRoot implements ApplicationListener {
 
 	private void createHats() {
 		HatDistributor hd = services().hatDistributor();
-		HatGenerator hg = new HatGenerator();
+		HatGenerator hg = services().hatGenerator();
 
 		for (Hat h : hd.distributeHats(hg.generateHats(constants().getInt("initial_hats")))) {
 			mDrawables.add(h);

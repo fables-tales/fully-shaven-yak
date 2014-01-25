@@ -48,4 +48,8 @@ public class PhysicsSprite extends Drawable implements Updateable {
 		mBody.setTransform(
 				new Vector2(x,y).scl((float) (1.0/GameServices.PIXELS_PER_METER)), 0);
 	}
+
+	public void setVelocity(float x, float y) {
+		mBody.setLinearVelocity(x/GameServices.PIXELS_PER_METER, y/GameServices.PIXELS_PER_METER);
+	}
 }

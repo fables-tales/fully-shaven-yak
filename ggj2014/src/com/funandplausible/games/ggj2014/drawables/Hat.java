@@ -2,6 +2,7 @@ package com.funandplausible.games.ggj2014.drawables;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
@@ -42,6 +43,7 @@ public class Hat extends Drawable implements Updateable {
 		mSprite = new PhysicsSprite(sd, ballBody, ballFixture);
 		ballFixture.setUserData(this);
 		ballBody.setUserData(this);
+		ballBody.setTransform(new Vector2(10000, 10000), 0);
 		mFixture = ballFixture;
 	}
 	
@@ -72,6 +74,10 @@ public class Hat extends Drawable implements Updateable {
 	public void rearm() {
 		mFixture.setUserData(this);
 		mFixture.setSensor(false);
+	}
+
+	public Vector2 position() {
+		return mSprite.position();
 	}
 
 }

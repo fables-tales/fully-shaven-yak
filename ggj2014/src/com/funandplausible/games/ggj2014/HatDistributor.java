@@ -13,7 +13,14 @@ public class HatDistributor {
 	public List<Hat> distributeHats(List<Hat> hats) {
 		for (Hat h : hats) {
 			float x = GameRoot.services().random().nextFloat()*mHatSpawnSize - mHatSpawnSize/2;
+			while (Math.abs(x) < 200) {
+				x = GameRoot.services().random().nextFloat()*mHatSpawnSize - mHatSpawnSize/2;
+			}
 			float y = GameRoot.services().random().nextFloat()*mHatSpawnSize - mHatSpawnSize/2;
+			while (Math.abs(y) < 200) {
+				y = GameRoot.services().random().nextFloat()*mHatSpawnSize - mHatSpawnSize/2;
+			}
+			System.out.println(x + " " + y);
 			h.setPosition(x, y);
 		}
 
