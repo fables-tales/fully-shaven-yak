@@ -24,6 +24,7 @@ public class GameRoot implements ApplicationListener {
 
     private static GameServices sServices;
     private static final int STATE_MAIN = 0x01;
+    private static final String[] ENEMY_TYPES = new String[] { "low_hat", "med_hat", "high_hat" };
 
     public static GameServices services() {
         return sServices;
@@ -49,7 +50,11 @@ public class GameRoot implements ApplicationListener {
 
         createPlayer();
         createBackground();
-        createHats();
+
+        if (constants().getBoolean("spawn_hats_on_floor")) {
+        	createHats();
+        }
+
         createEnemies();
         createListener();
 
@@ -70,8 +75,7 @@ public class GameRoot implements ApplicationListener {
                 : -bounds - random().nextFloat() * 1000;
         float initialY = random().nextFloat() * bounds * 2 - bounds;
         float initialVelocityX = leftMovingEnemy ? -enemySpeed : enemySpeed;
-        HatGenerator hg = services().hatGenerator();
-        List<Hat> hats = hg.generateHats(3);
+        List<Hat> hats = generateEnemyHats();
         EnemyEntity ee = new EnemyEntity(initialX, initialY, initialVelocityX,
                 bounds, hats, mPlayer);
         mUpdateables.addAll(hats);
@@ -80,6 +84,30 @@ public class GameRoot implements ApplicationListener {
         mUpdateables.add(ee);
         mDrawables.add(ee);
     }
+
+	private List<Hat> generateEnemyHats() {
+		float totalProbability = 0;
+		for (String et : ENEMY_TYPES) {
+			totalProbability += constants().getFloat(et + "_npc_probability");
+		}
+		
+		float actualProbability = services().random().nextFloat() * totalProbability;
+		int i = -1;
+		while (actualProbability > 0) {
+			actualProbability -= constants().getFloat(ENEMY_TYPES[i+1] + "_npc_probability");
+			i++;
+		}
+		
+		System.out.println("enemy type: " + i);
+		
+		String enemyType = ENEMY_TYPES[i];
+		int minHatCount = constants().getInt(enemyType + "_npc_hat_min");
+		int maxHatCount = constants().getInt(enemyType + "_npc_hat_max");
+		int nHats = services().random().nextInt(maxHatCount - minHatCount) + minHatCount;
+		HatGenerator hg = services().hatGenerator();
+        List<Hat> hats = hg.generateHats(nHats);
+		return hats;
+	}
 
     private Random random() {
         return services().random();

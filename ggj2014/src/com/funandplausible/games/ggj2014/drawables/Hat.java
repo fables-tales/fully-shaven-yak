@@ -1,5 +1,6 @@
 package com.funandplausible.games.ggj2014.drawables;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
@@ -19,7 +20,7 @@ public class Hat extends Drawable implements Updateable {
     private final PhysicsSprite mSprite;
     private final Fixture mFixture;
 
-    public Hat(Sprite s) {
+    public Hat(Sprite s, Color color, GameServices gs) {
         // Define a body for the ball
         Body ballBody;
 
@@ -38,7 +39,7 @@ public class Hat extends Drawable implements Updateable {
         ballFixtureDef.density = 1;
 
         // Create a ball
-        ballBody = GameRoot.services().world().createBody(ballBodyDef);
+        ballBody = gs.world().createBody(ballBodyDef);
         ballFixture = ballBody.createFixture(ballFixtureDef);
         SpriteDrawable sd = new SpriteDrawable(s, 10);
         mSprite = new PhysicsSprite(sd, ballBody, ballFixture);
@@ -46,6 +47,8 @@ public class Hat extends Drawable implements Updateable {
         ballBody.setUserData(this);
         ballBody.setTransform(new Vector2(10000, 10000), 0);
         mFixture = ballFixture;
+        
+        s.setColor(color);
     }
 
     public void disarm() {
