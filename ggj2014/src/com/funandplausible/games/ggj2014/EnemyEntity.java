@@ -113,6 +113,7 @@ public class EnemyEntity extends Drawable implements Updateable, HatInteractor,
         for (Hat h : mHats) {
             i++;
             h.setPosition(centerX(), centerY() + 25 + i * 15);
+            h.setPriority(100000 + i);
         }
 
         Vector2 vel = mSprite.body().getLinearVelocity();

@@ -19,6 +19,7 @@ public class Hat extends Drawable implements Updateable {
     private final PhysicsSprite mSprite;
     private final Fixture mFixture;
     private String mKey;
+    private int mPriority = 100000;
 
     public Hat(Sprite s, Color color, String key, GameServices gs) {
     	mKey = key;
@@ -66,7 +67,7 @@ public class Hat extends Drawable implements Updateable {
 
     @Override
     public int priority() {
-        return mSprite.priority();
+    	return mPriority;
     }
 
     @Override
@@ -91,5 +92,9 @@ public class Hat extends Drawable implements Updateable {
     public Vector2 position() {
         return mSprite.position();
     }
+
+	public void setPriority(int i) {
+		mPriority = i;
+	}
 
 }
