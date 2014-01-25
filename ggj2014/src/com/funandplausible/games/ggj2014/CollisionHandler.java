@@ -9,15 +9,18 @@ public class CollisionHandler {
     }
 
     public void checkPlayerHat(Fixture fixtureA, Fixture fixtureB) {
-        if (fixtureA.getUserData() instanceof PlayerEntity
+        if (fixtureA.getUserData() instanceof HatCollector
                 && fixtureB.getUserData() instanceof Hat) {
             Hat h = (Hat) fixtureB.getUserData();
-            PlayerEntity p = (PlayerEntity) fixtureA.getUserData();
+            HatCollector c = (HatCollector) fixtureA.getUserData();
             h.disarm();
-            System.out.println(p.hatCount());
-            if (p.hatCount() < 10) {
-            	p.pushHat(h);
-            }
+            c.receiveHat(h);
+        }
+        if (fixtureA.getUserData() instanceof Hat && fixtureB.getUserData() instanceof Hat) {
+        	Hat h = (Hat) fixtureA.getUserData();
+            HatCollector c = (HatCollector) fixtureB.getUserData();
+            h.disarm();
+            c.receiveHat(h);
         }
     }
 
