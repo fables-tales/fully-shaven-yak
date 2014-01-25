@@ -240,8 +240,13 @@ public class GameRoot implements ApplicationListener {
     }
     
     private boolean mAllowSinglePop = true;
+    private float mTimeSinceSpace = 0;
 
     private void dropAllHats() {
+    	mTimeSinceSpace++;
+    	if (mTimeSinceSpace > 30) {
+    		mAllowSinglePop = true;
+    	}
         if (Gdx.input.isKeyPressed(Keys.SPACE)) {
         	List<Hat> playersHats;
 
@@ -249,14 +254,8 @@ public class GameRoot implements ApplicationListener {
         		playersHats = new ArrayList<Hat>();
         		if (mPlayer.hatCount() > 0 && mAllowSinglePop) {
         			mAllowSinglePop = false;
+        			mTimeSinceSpace = 0;
         			playersHats.add(mPlayer.getHats().pop());
-        			new Timer().schedule(new TimerTask() {
-					
-        				@Override
-        				public void run() {
-        					mAllowSinglePop = true;
-        				}
-        			}, 500);
         		}
         	} else {
         		playersHats = mPlayer.popAllHats();
