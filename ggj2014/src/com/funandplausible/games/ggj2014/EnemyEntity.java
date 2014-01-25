@@ -17,7 +17,7 @@ import com.funandplausible.games.ggj2014.drawables.Drawable;
 import com.funandplausible.games.ggj2014.drawables.Hat;
 import com.funandplausible.games.ggj2014.drawables.SpriteDrawable;
 
-public class EnemyEntity extends Drawable implements Updateable, HatInteractor {
+public class EnemyEntity extends Drawable implements Updateable, HatInteractor, HatCollector {
     private PhysicsSprite mSprite;
     private final Stack<Hat> mHats;
     private boolean mDead = false;
@@ -184,5 +184,10 @@ public class EnemyEntity extends Drawable implements Updateable, HatInteractor {
     public Body body() {
         return mSprite.body();
     }
+
+	@Override
+	public void receiveHat(Hat hat) {
+		mHats.push(hat);
+	}
 
 }
