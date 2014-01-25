@@ -13,24 +13,15 @@ public class ConstantManager {
     }
 
     public float getFloat(String key) {
-        if (!mValues.containsKey(key)) {
-            throw new Error("couldn't find constant " + key);
-        }
-        return Float.parseFloat(mValues.get(key));
+        return Float.parseFloat(getString(key));
     }
 
     public int getInt(String key) {
-        if (!mValues.containsKey(key)) {
-            throw new Error("couldn't find constant " + key);
-        }
-        return Integer.parseInt(mValues.get(key));
+        return Integer.parseInt(getString(key));
     }
 
     public boolean getBoolean(String key) {
-        if (!mValues.containsKey(key)) {
-            throw new Error("couldn't find constant " + key);
-        }
-        return mValues.get(key).equals("true") ? true : false;
+        return getString(key).equals("true");
     }
 
     public String getString(String key) {
