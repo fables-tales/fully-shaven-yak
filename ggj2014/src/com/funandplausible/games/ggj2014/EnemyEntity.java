@@ -153,11 +153,25 @@ public class EnemyEntity extends Drawable implements Updateable, HatInteractor,
 
     private void pickNewTarget() {
         Random rng = new Random();
-        mTargetX = mBound * (2 * rng.nextFloat() - 1);
-        mTargetY = mBound * (2 * rng.nextFloat() - 1);
+        mTargetX = mBound * distributedValue(rng);
+        mTargetY = mBound * distributedValue(rng);
     }
 
-    private float centerX() {
+    private float distributedValue(Random rng) {
+		float basis = (float) (rng.nextGaussian() * 0.5);
+		if (basis < -1.0f) {
+			basis = -1.0f;
+		} else if (basis > 1.0f) {
+			basis = 1.0f;
+		}
+		if (basis < 0.0f) {
+			return -1.0f - basis;
+		} else {
+			return 1.0f - basis;
+		}
+	}
+
+	private float centerX() {
         return mSprite.position().x;
     }
 
