@@ -9,10 +9,8 @@ public class CollisionHandler {
     }
 
     public void checkPlayerHat(Fixture fixtureA, Fixture fixtureB) {
-    	System.out.println("called");
         if (fixtureA.getUserData() instanceof PlayerEntity
                 && fixtureB.getUserData() instanceof Hat) {
-        	System.out.println("here");
             Hat h = (Hat) fixtureB.getUserData();
             PlayerEntity p = (PlayerEntity) fixtureA.getUserData();
             h.disarm();

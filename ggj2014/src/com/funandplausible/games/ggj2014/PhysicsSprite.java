@@ -38,6 +38,10 @@ public class PhysicsSprite extends Drawable implements Updateable {
 
     @Override
     public void draw(SpriteBatch sb) {
+        mDrawable.setPosition(mBody.getPosition().x
+                * GameServices.PIXELS_PER_METER - mDrawable.getWidth() / 2,
+                mBody.getPosition().y * GameServices.PIXELS_PER_METER
+                        - mDrawable.getHeight() / 2);
         mDrawable.draw(sb);
     }
 

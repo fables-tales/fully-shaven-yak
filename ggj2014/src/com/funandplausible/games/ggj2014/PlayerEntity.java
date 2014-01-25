@@ -61,11 +61,6 @@ public class PlayerEntity extends Drawable implements Updateable, HatInteractor 
     @Override
     public void update() {
         mSprite.body().setLinearVelocity(inputVector().scl(mPlayerSpeed));
-        int i = 0;
-        for (Hat h : mHats) {
-            i++;
-            h.setPosition(centerX(), centerY() + 50 + i * 15);
-        }
         mSprite.update();
     }
 
@@ -88,6 +83,11 @@ public class PlayerEntity extends Drawable implements Updateable, HatInteractor 
 
     @Override
     public void draw(SpriteBatch sb) {
+        int i = 0;
+        for (Hat h : mHats) {
+            i++;
+            h.setPosition(centerX(), centerY() + 50 + i * 15);
+        }
         mSprite.draw(sb);
     }
 
@@ -122,7 +122,6 @@ public class PlayerEntity extends Drawable implements Updateable, HatInteractor 
 
     @Override
     public void winInteraction(HatInteractor other) {
-        System.out.println("won interaction");
         GameRoot.services().scoreBoard().winPoints(10);
         if (other.hatCount() > 0 && mHats.size() < 10) {
             mHats.add(other.getHats().pop());
