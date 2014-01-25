@@ -24,7 +24,9 @@ final class CollisionContactListener implements ContactListener {
         Fixture fixtureA = contact.getFixtureA();
         Fixture fixtureB = contact.getFixtureB();
         mCollisionHandler.checkPlayerHat(fixtureA, fixtureB);
+        mCollisionHandler.checkPlayerHat(fixtureB, fixtureA);
         mCollisionHandler.checkHatInteractors(fixtureA, fixtureB);
+        mCollisionHandler.checkHatInteractors(fixtureB, fixtureA);
     }
 
     @Override

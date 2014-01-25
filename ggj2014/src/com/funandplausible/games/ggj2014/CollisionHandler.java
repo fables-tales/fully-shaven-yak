@@ -8,19 +8,22 @@ public class CollisionHandler {
         GameRoot.services().world().setContactListener(new CollisionContactListener(this));
     }
 
-    void checkPlayerHat(Fixture fixtureA, Fixture fixtureB) {
+    public void checkPlayerHat(Fixture fixtureA, Fixture fixtureB) {
+    	System.out.println("called");
         if (fixtureA.getUserData() instanceof PlayerEntity
                 && fixtureB.getUserData() instanceof Hat) {
+        	System.out.println("here");
             Hat h = (Hat) fixtureB.getUserData();
             PlayerEntity p = (PlayerEntity) fixtureA.getUserData();
             h.disarm();
+            System.out.println(p.hatCount());
             if (p.hatCount() < 10) {
             	p.pushHat(h);
             }
         }
     }
 
-    void checkHatInteractors(Fixture fixtureA, Fixture fixtureB) {
+    public void checkHatInteractors(Fixture fixtureA, Fixture fixtureB) {
         if (fixtureA.getUserData() instanceof HatInteractor
                 && fixtureB.getUserData() instanceof HatInteractor) {
             HatInteractor a = (HatInteractor) fixtureA.getUserData();
