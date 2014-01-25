@@ -1,5 +1,6 @@
 package com.funandplausible.games.ggj2014;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.Stack;
@@ -7,6 +8,7 @@ import java.util.Stack;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
@@ -17,15 +19,17 @@ import com.funandplausible.games.ggj2014.drawables.Drawable;
 import com.funandplausible.games.ggj2014.drawables.Hat;
 import com.funandplausible.games.ggj2014.drawables.SpriteDrawable;
 
-public class EnemyEntity extends Drawable implements Updateable, HatInteractor, HatCollector {
+public class EnemyEntity extends Drawable implements Updateable, HatInteractor,
+        HatCollector {
     private PhysicsSprite mSprite;
     private final Stack<Hat> mHats;
     private boolean mDead = false;
-    private Sprite mGDXSprite;
     private final HatInteractor mPlayer;
     private float mTargetX, mTargetY;
     private int mWaitTicks = 0;
-	private final float mBound;
+    private final float mBound;
+    private String mAnim = "walk_right_bad";
+    private final AnimationManager mAnimationManager;
 
     public EnemyEntity(float initialX, float initialY, float bounds,
             List<Hat> hats, HatInteractor player) {
@@ -36,8 +40,25 @@ public class EnemyEntity extends Drawable implements Updateable, HatInteractor, 
         mTargetX = initialX;
         mTargetY = initialY;
         mBound = bounds;
-        
+        mAnimationManager = new AnimationManager();
+        loadAnimation("walk_down_bad", 0, 1);
+        loadAnimation("walk_up_bad", 0, 1);
+        loadAnimation("walk_left_bad", 0, 1);
+        loadAnimation("walk_right_bad", 0, 1);
+
         pickNewTarget();
+    }
+
+    private void loadAnimation(String string, int start_frame, int end_frame) {
+        List<Sprite> frames = new ArrayList<Sprite>();
+        for (int i = start_frame; i < end_frame; i++) {
+            Sprite s = GameRoot.services().contentManager()
+                    .loadSprite(string + "_" + i + ".png");
+            s.setBounds(0, 0, 75 / 1.844f, 75);
+            frames.add(s);
+        }
+
+        mAnimationManager.addAnimation(string, frames);
     }
 
     private void setupPhysicsSprite(float x, float y) {
@@ -74,7 +95,6 @@ public class EnemyEntity extends Drawable implements Updateable, HatInteractor, 
         s.setColor(1.0f, 0.0f, 1.0f, 1.0f);
         SpriteDrawable sd = new SpriteDrawable(s, 200);
         mSprite = new PhysicsSprite(sd, ballBody, ballFixture);
-        mGDXSprite = s;
     }
 
     @Override
@@ -84,33 +104,50 @@ public class EnemyEntity extends Drawable implements Updateable, HatInteractor, 
             i++;
             h.setPosition(centerX(), centerY() + 50 + i * 15);
         }
+
+        Vector2 vel = mSprite.body().getLinearVelocity();
+
+        if (vel.x < 0) {
+            mAnim = "walk_left_bad";
+        } else if (vel.x > 0) {
+            mAnim = "walk_right_bad";
+        }
+
+        if (vel.y < 0) {
+            mAnim = "walk_down_bad";
+        } else if (vel.y > 0) {
+            mAnim = "walk_up_bad";
+        }
+
+        mAnimationManager.startAnimation(mAnim);
+
         if (mWaitTicks > 0) {
-        	if (mWaitTicks == 1) {
-        		pickNewTarget();
-        	}
-        	mSprite.setVelocity(0, 0);
-        	--mWaitTicks;
+            if (mWaitTicks == 1) {
+                pickNewTarget();
+            }
+            mSprite.setVelocity(0, 0);
+            --mWaitTicks;
         } else {
-        	final float speed = 20.0f;
-        	float dx = mTargetX - centerX();
-        	float dy = mTargetY - centerY();
-        	float size = (float) Math.hypot(dx, dy);
-        	if (size < 2.0f) {
-        		mWaitTicks = 90;
-        	} else {
-        		mSprite.setVelocity(speed*dx / size, speed*dy / size);
-        	}
+            final float speed = 20.0f;
+            float dx = mTargetX - centerX();
+            float dy = mTargetY - centerY();
+            float size = (float) Math.hypot(dx, dy);
+            if (size < 2.0f) {
+                mWaitTicks = 90;
+            } else {
+                mSprite.setVelocity(speed * dx / size, speed * dy / size);
+            }
         }
         mSprite.update();
     }
 
     private void pickNewTarget() {
-		Random rng = new Random();
-		mTargetX = mBound*(2*rng.nextFloat() - 1);
-		mTargetY = mBound*(2*rng.nextFloat() - 1);
-	}
+        Random rng = new Random();
+        mTargetX = mBound * (2 * rng.nextFloat() - 1);
+        mTargetY = mBound * (2 * rng.nextFloat() - 1);
+    }
 
-	private float centerX() {
+    private float centerX() {
         return mSprite.position().x;
     }
 
@@ -125,8 +162,11 @@ public class EnemyEntity extends Drawable implements Updateable, HatInteractor, 
 
     @Override
     public void draw(SpriteBatch sb) {
-        mGDXSprite.setColor(playerHatDeltaColor());
-        mSprite.draw(sb);
+        Sprite sprite = mAnimationManager.nextFrame();
+        sprite.setPosition(mSprite.position().x - 75 / (2 * 1.844f),
+                mSprite.position().y - 75 / 2);
+        sprite.setColor(playerHatDeltaColor());
+        sprite.draw(sb);
     }
 
     private Color playerHatDeltaColor() {
@@ -175,10 +215,10 @@ public class EnemyEntity extends Drawable implements Updateable, HatInteractor, 
             mHats.push(other.getHats().pop());
         }
     }
-    
+
     @Override
     public boolean isNPC() {
-    	return true;
+        return true;
     }
 
     @Override
@@ -190,9 +230,9 @@ public class EnemyEntity extends Drawable implements Updateable, HatInteractor, 
         return mSprite.body();
     }
 
-	@Override
-	public void receiveHat(Hat hat) {
-		mHats.push(hat);
-	}
+    @Override
+    public void receiveHat(Hat hat) {
+        mHats.push(hat);
+    }
 
 }
