@@ -26,7 +26,7 @@ public class PlayerEntity extends Drawable implements Updateable,
     private final int mMaxHatCount;
 
     public PlayerEntity() {
-    	mMaxHatCount = GameRoot.services().constantManager().getInt("max_hats");
+        mMaxHatCount = GameRoot.services().constantManager().getInt("max_hats");
         // Define a body for the ball
         Body ballBody;
 
@@ -55,7 +55,7 @@ public class PlayerEntity extends Drawable implements Updateable,
         ballBody.setUserData(this);
 
         Sprite s = GameRoot.services().contentManager()
-                .loadSprite("walk_down_0.png");
+                .loadPackedSprite("walk_down0");
         s.setBounds(0, 0, 75 / 1.844f, 75);
         mAnimationManager = new AnimationManager();
         loadAnimation("walk_down", 0, 1);
@@ -72,7 +72,7 @@ public class PlayerEntity extends Drawable implements Updateable,
         List<Sprite> frames = new ArrayList<Sprite>();
         for (int i = start_frame; i < end_frame; i++) {
             Sprite s = GameRoot.services().contentManager()
-                    .loadSprite(string + "_" + i + ".png");
+                    .loadPackedSprite(string + i);
             s.setBounds(0, 0, 75 / 1.844f, 75);
             frames.add(s);
         }
