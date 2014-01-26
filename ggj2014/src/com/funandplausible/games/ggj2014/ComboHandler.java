@@ -11,11 +11,13 @@ import com.funandplausible.games.ggj2014.drawables.Hat;
 
 public class ComboHandler {
     private final HatInteractor mInteractor;
-    private Collection<String> mRequiredHats;
+    private List<String> mRequiredHats;
     private float mStartComboTime;
     private float mComboTimeRemaining;
     private final Sprite mSprite;
     private final List<Sprite> mHatSprites;
+    private final List<Sprite> mCheckSprites;
+    private final List<Sprite> mFrameSprites;
 
     public ComboHandler(HatInteractor interactor) {
         mInteractor = interactor;
@@ -23,6 +25,8 @@ public class ComboHandler {
                 .getFloat("first_combo_time");
         mSprite = GameRoot.services().contentManager().loadPackedSprite("bar");
         mHatSprites = new ArrayList<Sprite>();
+        mCheckSprites = new ArrayList<Sprite>();
+        mFrameSprites = new ArrayList<Sprite>();
         newCombo();
     }
 
@@ -80,6 +84,8 @@ public class ComboHandler {
         mComboTimeRemaining = mStartComboTime;
         ArrayList<String> build = new ArrayList<String>();
         mHatSprites.clear();
+        mCheckSprites.clear();
+        mFrameSprites.clear();
         for (int i = 0; i < GameRoot.services().constantManager()
                 .getInt("hats_in_combo"); i++) {
             int index = random().nextInt(HatGenerator.HAT_INDICES.length);
@@ -88,6 +94,8 @@ public class ComboHandler {
             build.add(color + "_" + index);
             mHatSprites.add(GameRoot.services().hatGenerator()
                     .tintedSprite(color + "_" + index));
+            mCheckSprites.add(GameRoot.services().contentManager().loadPackedSprite("check"));
+            mFrameSprites.add(GameRoot.services().contentManager().loadPackedSprite("hatframe"));
         }
         mRequiredHats = build;
     }
@@ -112,11 +120,31 @@ public class ComboHandler {
         mSprite.setBounds(600, 500,
                 150 * mComboTimeRemaining / mStartComboTime, 25);
         mSprite.draw(spriteBatch);
-        int i = 0;
+        int i;
+        i = 0;
+        for (Sprite s : mFrameSprites) {
+        	s.setBounds(-10 + i * 150, 490, 120, 100);
+        	s.draw(spriteBatch);
+        	i++;
+        }
+        i= 0;
         for (Sprite s : mHatSprites) {
             s.setBounds(i * 150, 500, 100, 100);
             s.draw(spriteBatch);
             i++;
+        }
+        i = 0;
+        List<String> currentHats = currentHatNames();
+        for (Sprite s : mCheckSprites) {
+        	String expectedHat = mRequiredHats.get(i);
+        	if (currentHats.remove(expectedHat)) {
+        		s.setColor(1.0f, 1.0f, 1.0f, 1.0f);
+        	} else {
+        		s.setColor(1.0f, 1.0f, 1.0f, 0.0f);
+        	}
+        	s.setBounds(i * 150, 500, 100, 100);
+        	s.draw(spriteBatch);
+        	i++;
         }
     }
 }

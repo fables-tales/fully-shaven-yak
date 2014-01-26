@@ -43,3 +43,4 @@ hat_drop_radius|float|140
 score_base|int|10
 score_bonus_pool|int|50
 max_hats|int|6
+disable_music|bool|false
