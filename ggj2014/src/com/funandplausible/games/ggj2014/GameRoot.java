@@ -67,6 +67,9 @@ public class GameRoot implements ApplicationListener {
         mHatSprite.setColor(Color.BLACK);
         mHatSprite.setBounds(0, 0, 50, 50);
     	mFont = new BitmapFont(Content.file("calibri.fnt"));
+    	
+    	services().soundManager().loopMusic("waltz", 1.0f);
+    	services().soundManager().loopMusic("chatter", 0.8f);
 
         if (constants().getBoolean("no_start_screen")) {
             mState = GameState.RUN;

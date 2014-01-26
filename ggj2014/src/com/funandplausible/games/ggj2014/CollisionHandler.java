@@ -36,6 +36,7 @@ public class CollisionHandler {
 
             int hatCountA = a.hatCount();
 			int hatCountB = b.hatCount();
+			GameRoot.services().soundManager().play("grumble");
 			if (hatCountA < hatCountB) {
                 a.winInteraction(b);
                 b.loseInteraction(a);

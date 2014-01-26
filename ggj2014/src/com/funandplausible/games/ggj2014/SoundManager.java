@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.Random;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 
 public class SoundManager {
@@ -17,6 +18,13 @@ public class SoundManager {
         float pitch = 0.9f + 0.24f * mRNG.nextFloat();
         snd.play(vol, pitch, 0.0f);
     }
+    
+    public void loopMusic(String name, float volume) {
+    	Music m = loadMusic(name);
+    	m.setLooping(true);
+    	m.setVolume(volume);
+    	m.play();
+    }
 
     private Sound getSound(String sound) {
         Sound snd = mSFX.get(sound);
@@ -25,6 +33,10 @@ public class SoundManager {
             mSFX.put(sound, snd);
         }
         return snd;
+    }
+    
+    private Music loadMusic(String name) {
+    	return Gdx.audio.newMusic(Content.file(name + ".wav"));
     }
 
     private Sound loadSound(String sound) {
