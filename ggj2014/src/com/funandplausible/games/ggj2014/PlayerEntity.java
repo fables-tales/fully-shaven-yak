@@ -166,9 +166,6 @@ public class PlayerEntity extends Drawable implements Updateable,
 
     @Override
     public void winInteraction(HatInteractor other) {
-        if (other.hatCount() > 0 && mHats.size() < mMaxHatCount) {
-            mHats.add(other.getHats().pop());
-        }
     }
 
     @Override
