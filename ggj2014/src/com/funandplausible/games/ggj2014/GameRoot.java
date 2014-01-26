@@ -315,7 +315,7 @@ public class GameRoot implements ApplicationListener {
     }
 
     private void drawMain() {
-        mainSpriteBatch().setProjectionMatrix(cameraMatrix().scale(1.2f, 1.2f, 1));
+        mainSpriteBatch().setProjectionMatrix(cameraMatrix().scale(1.5f, 1.5f, 1));
         mainSpriteBatch().begin();
         Collections.sort(mDrawables);
         for (Drawable d : mDrawables) {
