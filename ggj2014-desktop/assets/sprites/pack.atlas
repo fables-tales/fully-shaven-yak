@@ -99,23 +99,16 @@ pack2.png
 format: RGBA8888
 filter: Linear,Linear
 repeat: none
-calibri
-  rotate: false
-  xy: 2, 423
-  size: 512, 512
-  orig: 512, 512
-  offset: 0, 0
-  index: -1
 good_show
   rotate: false
-  xy: 516, 835
+  xy: 2, 2
   size: 100, 100
   orig: 100, 100
   offset: 0, 0
   index: -1
 ruffian
   rotate: false
-  xy: 2, 2
+  xy: 104, 2
   size: 100, 100
   orig: 100, 100
   offset: 0, 0
