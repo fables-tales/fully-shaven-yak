@@ -47,6 +47,7 @@ public class GameRoot implements ApplicationListener {
     private int mNEnemies;
 	private ComboHandler mComboHandler;
 	private Sprite mGameOverSprite;
+	private Sprite mMainMenuSprite;
 
     @Override
     public void create() {
@@ -56,7 +57,8 @@ public class GameRoot implements ApplicationListener {
         mEnemyEntities = new ArrayList<EnemyEntity>();
         mNEnemies = constants().getInt("n_enemies");
         mGameOverSprite = services().contentManager().loadSprite("lose.png");
-
+        mMainMenuSprite = services().contentManager().loadSprite("mainmenu.png");
+        
         if (constants().getBoolean("no_start_screen")) {
         	mState = GameState.RUN;
         } else {
@@ -187,7 +189,9 @@ public class GameRoot implements ApplicationListener {
     }
 
     private void drawMainMenu() {
-		// TODO Fill me in
+		uiSpriteBatch().begin();
+		mMainMenuSprite.draw(uiSpriteBatch());
+		uiSpriteBatch().end();
 	}
 
 	private void drawGameOver() {
