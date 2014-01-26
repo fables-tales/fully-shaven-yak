@@ -38,6 +38,6 @@ public class ScoreBoard {
     
     public void draw(SpriteBatch sb) {
     	mFont.setColor(Color.BLACK);
-    	mFont.draw(sb, "Score: " + mScore, 600, 400);
+    	mFont.draw(sb, "Score: " + mScore, 600, 450);
     }
 }

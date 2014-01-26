@@ -5,11 +5,14 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Random;
 
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.funandplausible.games.ggj2014.drawables.Hat;
 
 public class ComboHandler {
+	private BitmapFont mFont;
     private final HatInteractor mInteractor;
     private List<String> mRequiredHats;
     private float mStartComboTime;
@@ -27,6 +30,7 @@ public class ComboHandler {
         mHatSprites = new ArrayList<Sprite>();
         mCheckSprites = new ArrayList<Sprite>();
         mFrameSprites = new ArrayList<Sprite>();
+    	mFont = new BitmapFont(Content.file("calibri.fnt"));
         newCombo();
     }
 
@@ -117,7 +121,9 @@ public class ComboHandler {
     }
 
     public void draw(SpriteBatch spriteBatch) {
-        mSprite.setBounds(600, 500,
+    	mFont.setColor(Color.BLACK);
+    	mFont.draw(spriteBatch, "Time Left", 600, 530);
+        mSprite.setBounds(600, 475,
                 150 * mComboTimeRemaining / mStartComboTime, 25);
         mSprite.draw(spriteBatch);
         int i;
