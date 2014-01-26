@@ -310,13 +310,7 @@ public class GameRoot implements ApplicationListener {
                     services().soundManager().play("hats1");
                     mAllowSinglePop = false;
                     playersHats.add(mPlayer.getHats().pop());
-                    new Timer().schedule(new TimerTask() {
-
-                        @Override
-                        public void run() {
-                            mAllowSinglePop = true;
-                        }
-                    }, 500);
+                    mTimeSinceSpace = 0;
                 }
             } else {
                 playersHats = mPlayer.popAllHats();
