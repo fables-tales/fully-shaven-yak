@@ -11,7 +11,7 @@ import com.funandplausible.games.ggj2014.drawables.Hat;
 
 public class ComboHandler {
     private final HatInteractor mInteractor;
-    private Collection<String> mRequiredHats;
+    private List<String> mRequiredHats;
     private float mStartComboTime;
     private float mComboTimeRemaining;
     private final Sprite mSprite;
@@ -117,7 +117,14 @@ public class ComboHandler {
             i++;
         }
         i = 0;
+        List<String> currentHats = currentHatNames();
         for (Sprite s : mCheckSprites) {
+        	String expectedHat = mRequiredHats.get(i);
+        	if (currentHats.remove(expectedHat)) {
+        		s.setColor(1.0f, 1.0f, 1.0f, 1.0f);
+        	} else {
+        		s.setColor(1.0f, 1.0f, 1.0f, 0.0f);
+        	}
         	s.setBounds(i * 150, 500, 100, 100);
         	s.draw(spriteBatch);
         	i++;
