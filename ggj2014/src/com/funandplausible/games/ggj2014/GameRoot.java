@@ -6,8 +6,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
@@ -53,6 +51,7 @@ public class GameRoot implements ApplicationListener {
 	private BitmapFont mFont;
 	private Sprite mMainMenuSprite;
 	private Sprite mHatSprite;
+	private Sprite mInstructionsSprite;
 
     @Override
     public void create() {
@@ -63,6 +62,7 @@ public class GameRoot implements ApplicationListener {
         mNEnemies = constants().getInt("n_enemies");
         mGameOverSprite = services().contentManager().loadSprite("lose.png");
         mMainMenuSprite = services().contentManager().loadSprite("mainmenu.png");
+        mInstructionsSprite = services().contentManager().loadSprite("instructions.png");
         mHatSprite = services().contentManager().loadSprite("hat1.png");
         mHatSprite.setColor(Color.BLACK);
         mHatSprite.setBounds(0, 0, 50, 50);
@@ -176,14 +176,25 @@ public class GameRoot implements ApplicationListener {
 
     @Override
     public void render() {
+    	mTimeSinceSpace++;
         handlePauseInput();
         switch (mState) {
         case MAIN_MENU:
             if (Gdx.input.isKeyPressed(Keys.SPACE)) {
-                mState = GameState.RUN;
+                mState = GameState.INSTRUCTIONS;
+                mTimeSinceSpace = 0;
             } else {
                 clear();
                 drawMainMenu();
+                break;
+            }
+        case INSTRUCTIONS:
+            if (Gdx.input.isKeyPressed(Keys.SPACE) && mTimeSinceSpace > 60) {
+                mState = GameState.RUN;
+                mTimeSinceSpace = 0;
+            } else {
+                clear();
+                drawInstructions();
                 break;
             }
         case RUN:
@@ -202,7 +213,13 @@ public class GameRoot implements ApplicationListener {
         }
     }
 
-    private void handlePauseInput() {
+    private void drawInstructions() {
+        uiSpriteBatch().begin();
+        mInstructionsSprite.draw(uiSpriteBatch());
+        uiSpriteBatch().end();
+	}
+
+	private void handlePauseInput() {
         if (Gdx.input.isKeyPressed(Keys.ESCAPE)) {
             switch (mState) {
             case GAME_OVER:
