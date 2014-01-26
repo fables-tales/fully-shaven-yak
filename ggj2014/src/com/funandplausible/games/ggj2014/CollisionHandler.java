@@ -42,6 +42,11 @@ public class CollisionHandler {
             } else if (hatCountB < hatCountA) {
                 b.winInteraction(a);
                 a.loseInteraction(b);
+            } else if (hatCountA == hatCountB && a.hatCount() > 0) {
+            	Hat aHat = a.getHats().pop();
+            	Hat bHat = b.getHats().pop();
+            	a.getHats().push(bHat);
+            	b.getHats().push(aHat);
             }
         }
     }
