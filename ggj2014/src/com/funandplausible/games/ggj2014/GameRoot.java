@@ -306,7 +306,7 @@ public class GameRoot implements ApplicationListener {
         		h.setLoose();
         	}
         	
-        	services().hatDistributor().distributeHats(playersHats);
+        	services().hatDistributor().distributeHats(playersHats, mPlayer.position().x, mPlayer.position().y);
         }
     }
 
@@ -383,7 +383,7 @@ public class GameRoot implements ApplicationListener {
         HatGenerator hg = services().hatGenerator();
 
         for (Hat h : hd.distributeHats(hg.generateHats(constants().getInt(
-                "initial_hats")))) {
+                "initial_hats")), 0, 0)) {
             mDrawables.add(h);
             mUpdateables.add(h);
         }
