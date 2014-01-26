@@ -38,3 +38,7 @@ hats_in_combo|int|4
 camera_bound_x|float|70
 camera_bound_y|float|180
 drop_single_hat|bool|true
+no_start_screen|bool|true
+hat_drop_radius|float|140
+score_base|int|10
+score_bonus_pool|int|50

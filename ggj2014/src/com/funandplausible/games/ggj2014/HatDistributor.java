@@ -1,32 +1,23 @@
 package com.funandplausible.games.ggj2014;
 
 import java.util.List;
+import java.util.Random;
 
 import com.funandplausible.games.ggj2014.drawables.Hat;
 
 public class HatDistributor {
-    private final float mHatSpawnSize;
+    private final float mHatRadius;
 
     public HatDistributor(ConstantManager cm) {
-        mHatSpawnSize = cm.getInt("hat_spawn_size");
+        mHatRadius = cm.getFloat("hat_drop_radius");
     }
 
-    public List<Hat> distributeHats(List<Hat> hats) {
+    public List<Hat> distributeHats(List<Hat> hats, float centreX, float centreY) {
+    	Random rng = new Random();
         for (Hat h : hats) {
-            float x = GameRoot.services().random().nextFloat() * mHatSpawnSize
-                    - mHatSpawnSize / 2;
-            while (Math.abs(x) < 100) {
-                x = GameRoot.services().random().nextFloat() * mHatSpawnSize
-                        - mHatSpawnSize / 2;
-            }
-            float y = GameRoot.services().random().nextFloat() * mHatSpawnSize
-                    - mHatSpawnSize / 2;
-            while (Math.abs(y) < 100) {
-                y = GameRoot.services().random().nextFloat() * mHatSpawnSize
-                        - mHatSpawnSize / 2;
-            }
-            System.out.println(x + " " + y);
-            h.setPosition(x, y);
+        	float x = (float) (mHatRadius * rng.nextGaussian());
+        	float y = (float) (mHatRadius * rng.nextGaussian());
+        	h.setPosition(centreX + x, centreY + y);
         }
 
         return hats;

@@ -26,8 +26,6 @@ import com.funandplausible.games.ggj2014.drawables.SpriteDrawable;
 public class GameRoot implements ApplicationListener {
 
     private static GameServices sServices;
-    private static final int STATE_MAIN = 0x01;
-	private static final int STATE_GAME_OVER = 0x02;
     private static final String[] ENEMY_TYPES = new String[] { "low_hat", "med_hat", "high_hat" };
     
     private String mConstantsText;
@@ -42,13 +40,14 @@ public class GameRoot implements ApplicationListener {
 
     private List<Drawable> mDrawables;
     private Set<Updateable> mUpdateables;
-    private int mState;
+    private GameState mState;
     private Box2DDebugRenderer mDebugRenderer;
     private PlayerEntity mPlayer;
     private List<EnemyEntity> mEnemyEntities;
     private int mNEnemies;
 	private ComboHandler mComboHandler;
 	private Sprite mGameOverSprite;
+	private Sprite mMainMenuSprite;
 
     @Override
     public void create() {
@@ -58,9 +57,14 @@ public class GameRoot implements ApplicationListener {
         mEnemyEntities = new ArrayList<EnemyEntity>();
         mNEnemies = constants().getInt("n_enemies");
         mGameOverSprite = services().contentManager().loadSprite("lose.png");
-
-        mState = STATE_MAIN;
-
+        mMainMenuSprite = services().contentManager().loadSprite("mainmenu.png");
+        
+        if (constants().getBoolean("no_start_screen")) {
+        	mState = GameState.RUN;
+        } else {
+        	mState = GameState.MAIN_MENU;
+        }
+        	
         createPlayer();
         createBackground();
 
@@ -160,20 +164,57 @@ public class GameRoot implements ApplicationListener {
 
     @Override
     public void render() {
-        if (mState == STATE_MAIN) {
+    	handlePauseInput();
+    	switch (mState) {
+    	case MAIN_MENU:
+    		if (Gdx.input.isKeyPressed(Keys.SPACE)) {
+    			mState = GameState.RUN;
+    		} else {
+    			clear();
+    			drawMainMenu();
+    			break;
+    		}
+    	case RUN:
             updateMain();
-            clear();
-            drawMain();
-        } else if (mState == STATE_GAME_OVER) {
-        	if (Gdx.input.isKeyPressed(Keys.R)) {
+    	case PAUSED:
+    		clear();
+    		drawMain();
+    		break;
+    	case GAME_OVER:
+        	if (Gdx.input.isKeyPressed(Keys.SPACE)) {
         		create();
         	}
         	clear();
         	drawGameOver();
-        }
+        	break;
+    	}
     }
 
-    private void drawGameOver() {
+    private void handlePauseInput() {
+    	if (Gdx.input.isKeyPressed(Keys.ESCAPE)) {
+    		switch (mState) {
+    		case GAME_OVER:
+    			Gdx.app.exit();
+    			break;
+    		case MAIN_MENU:
+    			break;
+    		case PAUSED:
+    			mState = GameState.RUN;
+    			break;
+    		case RUN:
+    			mState = GameState.PAUSED;
+    			break;
+    		}
+    	}
+	}
+
+	private void drawMainMenu() {
+		uiSpriteBatch().begin();
+		mMainMenuSprite.draw(uiSpriteBatch());
+		uiSpriteBatch().end();
+	}
+
+	private void drawGameOver() {
     	uiSpriteBatch().begin();
     	mGameOverSprite.draw(uiSpriteBatch());
     	uiSpriteBatch().end();
@@ -190,7 +231,7 @@ public class GameRoot implements ApplicationListener {
         removeDeadEnemies();
         boolean comboResult = mComboHandler.tick();
         if (comboResult == false) {
-        	mState = STATE_GAME_OVER;
+        	mState = GameState.GAME_OVER;
         }
 
         Vector2 playerPosition = mPlayer.position();
@@ -227,7 +268,6 @@ public class GameRoot implements ApplicationListener {
         mEnemyEntities.removeAll(deadEntities);
 
         for (EnemyEntity ee : deadEntities) {
-            System.out.println("generating");
             mDrawables.remove(ee);
             mUpdateables.remove(ee);
             services().world().destroyBody(ee.body());
@@ -265,7 +305,7 @@ public class GameRoot implements ApplicationListener {
         		h.setLoose();
         	}
         	
-        	services().hatDistributor().distributeHats(playersHats);
+        	services().hatDistributor().distributeHats(playersHats, mPlayer.position().x, mPlayer.position().y);
         }
     }
 
@@ -342,7 +382,7 @@ public class GameRoot implements ApplicationListener {
         HatGenerator hg = services().hatGenerator();
 
         for (Hat h : hd.distributeHats(hg.generateHats(constants().getInt(
-                "initial_hats")))) {
+                "initial_hats")), 0, 0)) {
             mDrawables.add(h);
             mUpdateables.add(h);
         }

@@ -20,7 +20,7 @@ public class HatGenerator {
 		TINT_MAP.put("red", Color.RED);
 		TINT_MAP.put("green", Color.GREEN);
 		TINT_MAP.put("white", Color.WHITE);
-		TINT_MAP.put("black", Color.BLACK);
+		TINT_MAP.put("black", new Color(0.2f, 0.2f, 0.2f, 1.0f));
 	}
 
     private final GameServices mServices;
