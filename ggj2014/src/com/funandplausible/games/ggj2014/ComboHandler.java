@@ -34,9 +34,9 @@ public class ComboHandler {
 		}
 
 		if (allPresent) {
+			incrementScore();
 			decayCombo();
 			newCombo();
-			GameRoot.services().scoreBoard().winPoints(10);
 		} else {
 			tickCombo();
 		}
@@ -46,6 +46,14 @@ public class ComboHandler {
 		} else {
 			return true;
 		}
+	}
+
+	private void incrementScore() {
+		ConstantManager manager = GameRoot.services().constantManager();
+		int scoreBonus = 0;
+		scoreBonus += manager.getInt("score_base");
+		scoreBonus += (int)(manager.getInt("score_bonus_pool") * (mComboTimeRemaining / mStartComboTime));
+		GameRoot.services().scoreBoard().winPoints(scoreBonus);
 	}
 
 	private float comboTimeRemaining() {
