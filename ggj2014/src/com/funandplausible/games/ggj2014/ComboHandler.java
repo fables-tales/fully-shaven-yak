@@ -17,6 +17,7 @@ public class ComboHandler {
     private final Sprite mSprite;
     private final List<Sprite> mHatSprites;
     private final List<Sprite> mCheckSprites;
+    private final List<Sprite> mFrameSprites;
 
     public ComboHandler(HatInteractor interactor) {
         mInteractor = interactor;
@@ -25,6 +26,7 @@ public class ComboHandler {
         mSprite = GameRoot.services().contentManager().loadPackedSprite("bar");
         mHatSprites = new ArrayList<Sprite>();
         mCheckSprites = new ArrayList<Sprite>();
+        mFrameSprites = new ArrayList<Sprite>();
         newCombo();
     }
 
@@ -77,6 +79,7 @@ public class ComboHandler {
         ArrayList<String> build = new ArrayList<String>();
         mHatSprites.clear();
         mCheckSprites.clear();
+        mFrameSprites.clear();
         for (int i = 0; i < GameRoot.services().constantManager()
                 .getInt("hats_in_combo"); i++) {
             int index = random().nextInt(HatGenerator.HAT_INDICES.length);
@@ -86,6 +89,7 @@ public class ComboHandler {
             mHatSprites.add(GameRoot.services().hatGenerator()
                     .tintedSprite(color + "_" + index));
             mCheckSprites.add(GameRoot.services().contentManager().loadPackedSprite("check"));
+            mFrameSprites.add(GameRoot.services().contentManager().loadPackedSprite("hatframe"));
         }
         mRequiredHats = build;
     }
@@ -110,7 +114,14 @@ public class ComboHandler {
         mSprite.setBounds(600, 500,
                 150 * mComboTimeRemaining / mStartComboTime, 25);
         mSprite.draw(spriteBatch);
-        int i = 0;
+        int i;
+        i = 0;
+        for (Sprite s : mFrameSprites) {
+        	s.setBounds(-10 + i * 150, 490, 120, 100);
+        	s.draw(spriteBatch);
+        	i++;
+        }
+        i= 0;
         for (Sprite s : mHatSprites) {
             s.setBounds(i * 150, 500, 100, 100);
             s.draw(spriteBatch);
