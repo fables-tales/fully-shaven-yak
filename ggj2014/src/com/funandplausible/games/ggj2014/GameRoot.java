@@ -329,7 +329,6 @@ public class GameRoot implements ApplicationListener {
             if (services().constantManager().getBoolean("drop_single_hat")) {
                 playersHats = new ArrayList<Hat>();
                 if (mPlayer.hatCount() > 0 && mAllowSinglePop) {
-                    services().soundManager().play("hats1");
                     mAllowSinglePop = false;
                     playersHats.add(mPlayer.getHats().pop());
                     mTimeSinceSpace = 0;

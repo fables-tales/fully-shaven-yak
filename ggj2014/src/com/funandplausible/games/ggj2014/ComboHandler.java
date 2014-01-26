@@ -38,6 +38,7 @@ public class ComboHandler {
             incrementScore();
             decayCombo();
             newCombo();
+            playSound();
         } else {
             tickCombo();
         }
@@ -49,7 +50,12 @@ public class ComboHandler {
         }
     }
 
-    private void incrementScore() {
+    private void playSound() {
+    	GameRoot.services().soundManager().play("combo");
+		
+	}
+
+	private void incrementScore() {
         ConstantManager manager = GameRoot.services().constantManager();
         int scoreBonus = 0;
         scoreBonus += manager.getInt("score_base");
