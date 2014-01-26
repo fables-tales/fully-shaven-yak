@@ -181,7 +181,7 @@ public class GameRoot implements ApplicationListener {
     		drawMain();
     		break;
     	case GAME_OVER:
-        	if (Gdx.input.isKeyPressed(Keys.R)) {
+        	if (Gdx.input.isKeyPressed(Keys.SPACE)) {
         		create();
         	}
         	clear();
