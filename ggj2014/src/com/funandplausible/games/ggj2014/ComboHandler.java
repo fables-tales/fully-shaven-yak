@@ -16,6 +16,7 @@ public class ComboHandler {
     private float mComboTimeRemaining;
     private final Sprite mSprite;
     private final List<Sprite> mHatSprites;
+    private final List<Sprite> mCheckSprites;
 
     public ComboHandler(HatInteractor interactor) {
         mInteractor = interactor;
@@ -23,6 +24,7 @@ public class ComboHandler {
                 .getFloat("first_combo_time");
         mSprite = GameRoot.services().contentManager().loadPackedSprite("bar");
         mHatSprites = new ArrayList<Sprite>();
+        mCheckSprites = new ArrayList<Sprite>();
         newCombo();
     }
 
@@ -74,6 +76,7 @@ public class ComboHandler {
         mComboTimeRemaining = mStartComboTime;
         ArrayList<String> build = new ArrayList<String>();
         mHatSprites.clear();
+        mCheckSprites.clear();
         for (int i = 0; i < GameRoot.services().constantManager()
                 .getInt("hats_in_combo"); i++) {
             int index = random().nextInt(HatGenerator.HAT_INDICES.length);
@@ -82,6 +85,7 @@ public class ComboHandler {
             build.add(color + "_" + index);
             mHatSprites.add(GameRoot.services().hatGenerator()
                     .tintedSprite(color + "_" + index));
+            mCheckSprites.add(GameRoot.services().contentManager().loadPackedSprite("check"));
         }
         mRequiredHats = build;
     }
@@ -111,6 +115,12 @@ public class ComboHandler {
             s.setBounds(i * 150, 500, 100, 100);
             s.draw(spriteBatch);
             i++;
+        }
+        i = 0;
+        for (Sprite s : mCheckSprites) {
+        	s.setBounds(i * 150, 500, 100, 100);
+        	s.draw(spriteBatch);
+        	i++;
         }
     }
 }
