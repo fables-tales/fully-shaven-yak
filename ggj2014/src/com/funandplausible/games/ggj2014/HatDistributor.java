@@ -25,7 +25,6 @@ public class HatDistributor {
                 y = GameRoot.services().random().nextFloat() * mHatSpawnSize
                         - mHatSpawnSize / 2;
             }
-            System.out.println(x + " " + y);
             h.setPosition(x, y);
         }
 

@@ -15,14 +15,12 @@ public class CollisionHandler {
             HatCollector c = (HatCollector) fixtureA.getUserData();
             h.setBound();
             c.receiveHat(h);
-            System.err.println(c + " picks up hat");
         }
         if (fixtureA.getUserData() instanceof Hat && fixtureB.getUserData() instanceof Hat) {
         	Hat h = (Hat) fixtureA.getUserData();
             HatCollector c = (HatCollector) fixtureB.getUserData();
             h.setBound();
             c.receiveHat(h);
-            System.err.println(c + " picks up hat");
         }
     }
 
@@ -39,11 +37,9 @@ public class CollisionHandler {
             int hatCountA = a.hatCount();
 			int hatCountB = b.hatCount();
 			if (hatCountA < hatCountB) {
-            	System.err.println(a + " takes hat from " + b + " [C1]");
                 a.winInteraction(b);
                 b.loseInteraction(a);
             } else if (hatCountB < hatCountA) {
-            	System.err.println(b + " takes hat from " + a + " [C2]");
                 b.winInteraction(a);
                 a.loseInteraction(b);
             }

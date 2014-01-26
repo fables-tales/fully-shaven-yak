@@ -227,7 +227,6 @@ public class GameRoot implements ApplicationListener {
         mEnemyEntities.removeAll(deadEntities);
 
         for (EnemyEntity ee : deadEntities) {
-            System.out.println("generating");
             mDrawables.remove(ee);
             mUpdateables.remove(ee);
             services().world().destroyBody(ee.body());

@@ -261,7 +261,6 @@ public class EnemyEntity extends Drawable implements Updateable, HatInteractor,
 
 	private void blendGoodSprite() {
 		float currentAlpha = mGoodSprite.getColor().a;
-		System.out.println(currentAlpha);
 		mGoodSprite.setColor(1.0f, 1.0f, 1.0f, currentAlpha*COLOR_DECAY);
 	}
 
@@ -291,7 +290,6 @@ public class EnemyEntity extends Drawable implements Updateable, HatInteractor,
 
 	private void blendBadSprite() {
 		float currentAlpha = mBadSprite.getColor().a;
-		System.out.println(currentAlpha);
 		mBadSprite.setColor(1.0f, 1.0f, 1.0f, currentAlpha*COLOR_DECAY);
 	}
 
