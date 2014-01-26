@@ -244,9 +244,6 @@ public class EnemyEntity extends Drawable implements Updateable, HatInteractor,
     @Override
     public void loseInteraction(HatInteractor other) {
     	showGoodSpriteForNFrames(60);
-        if (mHats.empty()) {
-            die();
-        }
     }
     
     int mFramesRemaining, mStartFrames;
