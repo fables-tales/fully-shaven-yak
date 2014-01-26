@@ -1,7 +1,7 @@
 
 pack.png
 format: RGBA8888
-filter: Linear,Linear
+filter: MipMapLinearLinear,Linear
 repeat: none
 bar
   rotate: false
@@ -90,7 +90,7 @@ walk_up0
 
 pack2.png
 format: RGBA8888
-filter: Linear,Linear
+filter: MipMapLinearLinear,Linear
 repeat: none
 lose
   rotate: false
@@ -116,7 +116,7 @@ walk_up_bad0
 
 pack3.png
 format: RGBA8888
-filter: Linear,Linear
+filter: MipMapLinearLinear,Linear
 repeat: none
 mainmenu
   rotate: false
@@ -128,7 +128,7 @@ mainmenu
 
 pack4.png
 format: RGBA8888
-filter: Linear,Linear
+filter: MipMapLinearLinear,Linear
 repeat: none
 hat1
   rotate: false
