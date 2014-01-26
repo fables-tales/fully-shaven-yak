@@ -34,6 +34,8 @@ public class EnemyEntity extends Drawable implements Updateable, HatInteractor,
     private final float mBound;
     private String mAnim = "walk_right_bad";
     private final AnimationManager mAnimationManager;
+    private int mRedness;
+    private Color mColor;
 
     public EnemyEntity(float initialX, float initialY, float bounds,
             List<Hat> hats, HatInteractor player) {
@@ -42,9 +44,11 @@ public class EnemyEntity extends Drawable implements Updateable, HatInteractor,
         mPlayer = player;
         setupPhysicsSprite(initialX, initialY);
         mTargetX = initialX;
+        mRedness = GameRoot.services().random().nextInt(5)+1;
         mTargetY = initialY;
         mBound = bounds;
         mAnimationManager = new AnimationManager();
+        mColor = playerHatDeltaColor();
         loadAnimation("walk_down_bad", 0, 1);
         loadAnimation("walk_up_bad", 0, 1);
         loadAnimation("walk_left_bad", 0, 1);
@@ -203,7 +207,7 @@ public class EnemyEntity extends Drawable implements Updateable, HatInteractor,
         }
         sprite.setPosition(mSprite.position().x - 75 / (2 * 1.844f),
                 mSprite.position().y - 75 / 2);
-        sprite.setColor(playerHatDeltaColor());
+        sprite.setColor(mColor);
         sprite.draw(sb);
         if (mBadSprite.getColor().a > 0) {
             blendBadSprite();
@@ -225,7 +229,7 @@ public class EnemyEntity extends Drawable implements Updateable, HatInteractor,
             float whiteStop = 0;
             float redStop = 10;
 
-            float delta = hatCount() - mPlayer.hatCount();
+            float delta = mRedness;
             float alongness = delta / (redStop - whiteStop);
             float r = 1.0f;
             float g = 1.0f - alongness;

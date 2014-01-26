@@ -105,7 +105,7 @@ public class PlayerEntity extends Drawable implements Updateable,
 
         int i = 0;
         for (Hat h : mHats) {
-            h.setPosition(position().x, position().y + 50 + i * 15);
+            h.setPosition(position().x, position().y + 40 + i * 15);
             h.setPriority(100000 + i);
             i++;
         }

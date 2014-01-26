@@ -51,6 +51,7 @@ public class GameRoot implements ApplicationListener {
     private BitmapFont mFont;
     private Sprite mMainMenuSprite;
     private Sprite mHatSprite;
+    private Sprite mInstructionsSprite;
 
     @Override
     public void create() {
@@ -62,6 +63,8 @@ public class GameRoot implements ApplicationListener {
         mGameOverSprite = services().contentManager().loadPackedSprite("lose");
         mMainMenuSprite = services().contentManager().loadPackedSprite(
                 "mainmenu");
+        mInstructionsSprite = services().contentManager().loadPackedSprite(
+                "instructions");
         mHatSprite = services().contentManager().loadPackedSprite("hat1");
         mHatSprite.setColor(Color.BLACK);
         mHatSprite.setBounds(0, 0, 50, 50);
@@ -175,14 +178,25 @@ public class GameRoot implements ApplicationListener {
 
     @Override
     public void render() {
+        mTimeSinceSpace++;
         handlePauseInput();
         switch (mState) {
         case MAIN_MENU:
             if (Gdx.input.isKeyPressed(Keys.SPACE)) {
-                mState = GameState.RUN;
+                mState = GameState.INSTRUCTIONS;
+                mTimeSinceSpace = 0;
             } else {
                 clear();
                 drawMainMenu();
+                break;
+            }
+        case INSTRUCTIONS:
+            if (Gdx.input.isKeyPressed(Keys.SPACE) && mTimeSinceSpace > 60) {
+                mState = GameState.RUN;
+                mTimeSinceSpace = 0;
+            } else {
+                clear();
+                drawInstructions();
                 break;
             }
         case RUN:
@@ -199,6 +213,12 @@ public class GameRoot implements ApplicationListener {
             drawGameOver();
             break;
         }
+    }
+
+    private void drawInstructions() {
+        uiSpriteBatch().begin();
+        mInstructionsSprite.draw(uiSpriteBatch());
+        uiSpriteBatch().end();
     }
 
     private void handlePauseInput() {

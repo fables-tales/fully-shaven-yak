@@ -10,16 +10,15 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.funandplausible.games.ggj2014.drawables.Hat;
 
 public class HatGenerator {
-
     public final static String[] HAT_COLORS = new String[] { "blue", "red",
             "green", "white", "black" };
     public final static int[] HAT_INDICES = new int[] { 1, 1, 1, 1, 1 };
     private static final Map<String, Color> TINT_MAP = new HashMap<String, Color>();
 
     static {
-        TINT_MAP.put("blue", Color.BLUE);
-        TINT_MAP.put("red", Color.RED);
-        TINT_MAP.put("green", Color.GREEN);
+        TINT_MAP.put("blue", new Color(0x6C6CE8FF));
+        TINT_MAP.put("red", new Color(0xFF5A56FF));
+        TINT_MAP.put("green", new Color(0x4FFF9BFF));
         TINT_MAP.put("white", Color.WHITE);
         TINT_MAP.put("black", new Color(0.2f, 0.2f, 0.2f, 1.0f));
     }

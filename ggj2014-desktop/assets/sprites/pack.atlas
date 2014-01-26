@@ -5,91 +5,84 @@ filter: Linear,Linear
 repeat: none
 bar
   rotate: false
-  xy: 2, 97
+  xy: 2, 72
   size: 1, 1
   orig: 1, 1
   offset: 0, 0
   index: -1
-hat0
+good_show
   rotate: false
-  xy: 872, 256
-  size: 125, 125
-  orig: 125, 125
+  xy: 872, 2
+  size: 100, 100
+  orig: 100, 100
   offset: 0, 0
   index: -1
-hat1
+hat0
   rotate: false
-  xy: 872, 129
+  xy: 872, 231
   size: 125, 125
   orig: 125, 125
   offset: 0, 0
   index: -1
 hat2
   rotate: false
-  xy: 872, 2
+  xy: 872, 104
   size: 125, 125
   orig: 125, 125
   offset: 0, 0
   index: -1
-lose
+instructions
   rotate: false
-  xy: 2, 419
-  size: 800, 600
-  orig: 800, 600
-  offset: 0, 0
-  index: -1
-mainmenu
-  rotate: false
-  xy: 2, 419
+  xy: 2, 394
   size: 800, 600
   orig: 800, 600
   offset: 0, 0
   index: -1
 walk_down0
   rotate: false
-  xy: 2, 100
+  xy: 2, 75
   size: 172, 317
   orig: 172, 317
   offset: 0, 0
   index: -1
 walk_down_bad0
   rotate: false
-  xy: 804, 702
+  xy: 804, 677
   size: 172, 317
   orig: 172, 317
   offset: 0, 0
   index: -1
 walk_left0
   rotate: false
-  xy: 176, 100
+  xy: 176, 75
   size: 172, 317
   orig: 172, 317
   offset: 0, 0
   index: -1
 walk_left_bad0
   rotate: false
-  xy: 350, 100
+  xy: 350, 75
   size: 172, 317
   orig: 172, 317
   offset: 0, 0
   index: -1
 walk_right0
   rotate: false
-  xy: 524, 100
+  xy: 524, 75
   size: 172, 317
   orig: 172, 317
   offset: 0, 0
   index: -1
 walk_right_bad0
   rotate: false
-  xy: 804, 383
+  xy: 804, 358
   size: 172, 317
   orig: 172, 317
   offset: 0, 0
   index: -1
 walk_up0
   rotate: false
-  xy: 698, 64
+  xy: 698, 39
   size: 172, 317
   orig: 172, 317
   offset: 0, 0
@@ -99,24 +92,48 @@ pack2.png
 format: RGBA8888
 filter: Linear,Linear
 repeat: none
-good_show
+lose
   rotate: false
-  xy: 2, 2
-  size: 100, 100
-  orig: 100, 100
+  xy: 2, 321
+  size: 800, 600
+  orig: 800, 600
   offset: 0, 0
   index: -1
 ruffian
   rotate: false
-  xy: 104, 2
+  xy: 804, 821
   size: 100, 100
   orig: 100, 100
   offset: 0, 0
   index: -1
 walk_up_bad0
   rotate: false
-  xy: 2, 104
+  xy: 2, 2
   size: 172, 317
   orig: 172, 317
+  offset: 0, 0
+  index: -1
+
+pack3.png
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+mainmenu
+  rotate: false
+  xy: 2, 2
+  size: 800, 600
+  orig: 800, 600
+  offset: 0, 0
+  index: -1
+
+pack4.png
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+hat1
+  rotate: false
+  xy: 2, 2
+  size: 476, 493
+  orig: 476, 493
   offset: 0, 0
   index: -1
