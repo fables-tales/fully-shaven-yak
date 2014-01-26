@@ -18,15 +18,15 @@ public class SoundManager {
         float pitch = 0.9f + 0.24f * mRNG.nextFloat();
         snd.play(vol, pitch, 0.0f);
     }
-    
+
     public void loopMusic(String name, float volume) {
-    	if (GameRoot.services().constantManager().getBoolean("disable_music")) {
-    		return;
-    	}
-    	Music m = loadMusic(name);
-    	m.setLooping(true);
-    	m.setVolume(volume);
-    	m.play();
+        if (GameRoot.services().constantManager().getBoolean("disable_music")) {
+            return;
+        }
+        Music m = loadMusic(name);
+        m.setLooping(true);
+        m.setVolume(volume);
+        m.play();
     }
 
     private Sound getSound(String sound) {
@@ -37,12 +37,12 @@ public class SoundManager {
         }
         return snd;
     }
-    
+
     private Music loadMusic(String name) {
-    	return Gdx.audio.newMusic(Content.file(name + ".wav"));
+        return Gdx.audio.newMusic(Content.file(name + ".mp3"));
     }
 
     private Sound loadSound(String sound) {
-        return Gdx.audio.newSound(Content.file(sound + ".wav"));
+        return Gdx.audio.newSound(Content.file(sound + ".mp3"));
     }
 }
