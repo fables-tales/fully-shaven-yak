@@ -1,5 +1,5 @@
 {
-    filterMin: "Linear",
+    filterMin: "MipMapLinearLinear",
     filterMag: "Linear"
 }
 
