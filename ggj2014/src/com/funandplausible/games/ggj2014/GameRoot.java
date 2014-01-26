@@ -13,7 +13,9 @@ import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Camera;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL10;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Matrix4;
@@ -47,7 +49,9 @@ public class GameRoot implements ApplicationListener {
     private int mNEnemies;
 	private ComboHandler mComboHandler;
 	private Sprite mGameOverSprite;
+	private BitmapFont mFont;
 	private Sprite mMainMenuSprite;
+	private Sprite mHatSprite;
 
     @Override
     public void create() {
@@ -58,6 +62,11 @@ public class GameRoot implements ApplicationListener {
         mNEnemies = constants().getInt("n_enemies");
         mGameOverSprite = services().contentManager().loadSprite("lose.png");
         mMainMenuSprite = services().contentManager().loadSprite("mainmenu.png");
+        mHatSprite = services().contentManager().loadSprite("hat1.png");
+        mHatSprite.setColor(Color.BLACK);
+        mHatSprite.setBounds(0, 0, 50, 50);
+    	mFont = new BitmapFont(Content.file("calibri.fnt"));
+
         
         if (constants().getBoolean("no_start_screen")) {
         	mState = GameState.RUN;
@@ -327,6 +336,12 @@ public class GameRoot implements ApplicationListener {
         uiSpriteBatch().begin();
         mComboHandler.draw(uiSpriteBatch());
         services().scoreBoard().draw(uiSpriteBatch());
+        
+        String s = mPlayer.getHats().size() + "/10";
+        mFont.draw(uiSpriteBatch(), s, 690, 570);
+        mHatSprite.setPosition(620, 570-mHatSprite.getHeight()/2);
+        mHatSprite.draw(uiSpriteBatch());
+        
         uiSpriteBatch().end();
         
     }
