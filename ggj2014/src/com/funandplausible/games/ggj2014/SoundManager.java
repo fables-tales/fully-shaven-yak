@@ -20,6 +20,9 @@ public class SoundManager {
     }
     
     public void loopMusic(String name, float volume) {
+    	if (GameRoot.services().constantManager().getBoolean("disable_music")) {
+    		return;
+    	}
     	Music m = loadMusic(name);
     	m.setLooping(true);
     	m.setVolume(volume);
