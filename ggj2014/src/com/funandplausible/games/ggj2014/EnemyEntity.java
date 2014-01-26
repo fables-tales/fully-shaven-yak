@@ -255,7 +255,7 @@ public class EnemyEntity extends Drawable implements Updateable, HatInteractor,
 				&& mGoodSprite.getColor().a == 0
 				&& mBadSprite.getColor().a == 0) {
 			showGoodSpriteForNFrames(60);
-			GameRoot.services().soundManager().play("grumble");
+			GameRoot.services().soundManager().play("gethat");
 			other.getHats().push(getHats().pop());
 		}
 	}
@@ -289,7 +289,7 @@ public class EnemyEntity extends Drawable implements Updateable, HatInteractor,
 				&& mBadSprite.getColor().a == 0) {
 			showBadSpriteForNFrames(60);
 			mHats.push(other.getHats().pop());
-			GameRoot.services().soundManager().play("grumble");
+			GameRoot.services().soundManager().play("losehat");
 		}
 	}
 
