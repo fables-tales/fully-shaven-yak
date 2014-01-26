@@ -34,7 +34,7 @@ public class EnemyEntity extends Drawable implements Updateable, HatInteractor,
 	private final float mBound;
 	private String mAnim = "walk_right_bad";
 	private final AnimationManager mAnimationManager;
-	private int mRedness;
+	private final float mRedness;
 	private Color mColor;
 	private int mMaxHatCount;
 
@@ -45,7 +45,7 @@ public class EnemyEntity extends Drawable implements Updateable, HatInteractor,
 		mPlayer = player;
 		setupPhysicsSprite(initialX, initialY);
 		mTargetX = initialX;
-		mRedness = GameRoot.services().random().nextInt(5) + 1;
+		mRedness = GameRoot.services().random().nextFloat();
 		mTargetY = initialY;
 		mBound = bounds;
 		mMaxHatCount = GameRoot.services().constantManager().getInt("max_hats");
@@ -223,20 +223,19 @@ public class EnemyEntity extends Drawable implements Updateable, HatInteractor,
 			mGoodSprite.draw(sb);
 		}
 	}
+	
+	private float lerp(float a, float b, float delta) {
+		return delta*b + (1.0f - delta)*a;
+	}
 
 	private Color playerHatDeltaColor() {
 		if (hatCount() < mPlayer.hatCount()) {
 			return Color.WHITE;
 		} else {
-			float whiteStop = 0;
-			float redStop = 10;
-
-			float delta = mRedness;
-			float alongness = delta / (redStop - whiteStop);
-			float r = 1.0f;
-			float g = 1.0f - alongness;
-			float b = 1.0f - alongness;
-			return new Color(r, g, b, 1.0f);
+			return new Color(lerp(0.9f, 1.0f, mRedness),
+							 lerp(1.0f, 0.6f, mRedness),
+							 lerp(1.0f, 0.3f, mRedness),
+							 1.0f);
 		}
 	}
 
