@@ -164,6 +164,7 @@ public class GameRoot implements ApplicationListener {
 
     @Override
     public void render() {
+    	handlePauseInput();
     	switch (mState) {
     	case MAIN_MENU:
     		if (Gdx.input.isKeyPressed(Keys.SPACE)) {
@@ -175,9 +176,10 @@ public class GameRoot implements ApplicationListener {
     		}
     	case RUN:
             updateMain();
-            clear();
-            drawMain();
-            break;
+    	case PAUSED:
+    		clear();
+    		drawMain();
+    		break;
     	case GAME_OVER:
         	if (Gdx.input.isKeyPressed(Keys.R)) {
         		create();
@@ -188,7 +190,25 @@ public class GameRoot implements ApplicationListener {
     	}
     }
 
-    private void drawMainMenu() {
+    private void handlePauseInput() {
+    	if (Gdx.input.isKeyPressed(Keys.ESCAPE)) {
+    		switch (mState) {
+    		case GAME_OVER:
+    			Gdx.app.exit();
+    			break;
+    		case MAIN_MENU:
+    			break;
+    		case PAUSED:
+    			mState = GameState.RUN;
+    			break;
+    		case RUN:
+    			mState = GameState.PAUSED;
+    			break;
+    		}
+    	}
+	}
+
+	private void drawMainMenu() {
 		uiSpriteBatch().begin();
 		mMainMenuSprite.draw(uiSpriteBatch());
 		uiSpriteBatch().end();
