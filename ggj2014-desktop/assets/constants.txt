@@ -1,6 +1,6 @@
 name|type|value
 debug_physics|bool|false
-player_speed|float|4.0
+player_speed|float|3.0
 hat_spawn_size|float|1500
 initial_hats|int|20
 n_enemies|int|15
@@ -32,15 +32,9 @@ med_hat_npc_hat_min|int|3
 med_hat_npc_hat_max|int|5
 high_hat_npc_hat_min|int|5
 high_hat_npc_hat_max|int|7
-first_combo_time|float|100
+first_combo_time|float|150
 combo_time_decay|float|0.9
 hats_in_combo|int|4
-camera_bound_x|float|350
-camera_bound_y|float|400
+camera_bound_x|float|70
+camera_bound_y|float|180
 drop_single_hat|bool|true
-no_start_screen|bool|false
-hat_drop_radius|float|140
-score_base|int|10
-score_bonus_pool|int|50
-max_hats|int|6
-disable_music|bool|false
