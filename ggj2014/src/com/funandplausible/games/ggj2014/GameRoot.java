@@ -28,15 +28,16 @@ import com.funandplausible.games.ggj2014.drawables.SpriteDrawable;
 public class GameRoot implements ApplicationListener {
 
     private static GameServices sServices;
-    private static final String[] ENEMY_TYPES = new String[] { "low_hat", "med_hat", "high_hat" };
-    
-    private String mConstantsText;
+    private static final String[] ENEMY_TYPES = new String[] { "low_hat",
+            "med_hat", "high_hat" };
+
+    private final String mConstantsText;
 
     public GameRoot(String constants) {
-    	mConstantsText = constants;
-	}
+        mConstantsText = constants;
+    }
 
-	public static GameServices services() {
+    public static GameServices services() {
         return sServices;
     }
 
@@ -67,21 +68,20 @@ public class GameRoot implements ApplicationListener {
         mHatSprite.setBounds(0, 0, 50, 50);
     	mFont = new BitmapFont(Content.file("calibri.fnt"));
 
-        
         if (constants().getBoolean("no_start_screen")) {
-        	mState = GameState.RUN;
+            mState = GameState.RUN;
         } else {
-        	mState = GameState.MAIN_MENU;
+            mState = GameState.MAIN_MENU;
         }
-        	
+
         createPlayer();
         createBackground();
 
         if (constants().getBoolean("spawn_hats_on_floor")) {
-        	createHats();
+            createHats();
         }
-        
-		HatGenerator hg = services().hatGenerator();
+
+        HatGenerator hg = services().hatGenerator();
         List<Hat> hats = hg.generateHats(2);
 
         createEnemies();
@@ -92,16 +92,16 @@ public class GameRoot implements ApplicationListener {
         mDebugRenderer = new Box2DDebugRenderer();
         mPlayer.getHats().addAll(hats);
         for (Hat h : hats) {
-        	mDrawables.add(h);
-        	mUpdateables.add(h);
+            mDrawables.add(h);
+            mUpdateables.add(h);
         }
     }
 
     private void createWorldBounds() {
-    	new BoundaryCreator();
-	}
+        new BoundaryCreator();
+    }
 
-	private void createEnemies() {
+    private void createEnemies() {
         for (int i = 0; i < mNEnemies; i++) {
             generateEnemy();
         }
@@ -112,20 +112,20 @@ public class GameRoot implements ApplicationListener {
         float initialType = random().nextFloat();
         float initialX;
         float initialY;
-        if (initialType < 1.0/3.0) {
-        	initialX = bounds + random().nextFloat() * 200;
-        	initialY = random().nextFloat() * bounds * 2 - bounds;
-        } else if (initialType < 2.0/3.0) {
-        	initialX = -(bounds + random().nextFloat() * 200);
-        	initialY = random().nextFloat() * bounds * 2 - bounds;
+        if (initialType < 1.0 / 3.0) {
+            initialX = bounds + random().nextFloat() * 200;
+            initialY = random().nextFloat() * bounds * 2 - bounds;
+        } else if (initialType < 2.0 / 3.0) {
+            initialX = -(bounds + random().nextFloat() * 200);
+            initialY = random().nextFloat() * bounds * 2 - bounds;
         } else {
-        	initialX = 0;
-        	initialY = -bounds + random().nextFloat() * 200;
+            initialX = 0;
+            initialY = -bounds + random().nextFloat() * 200;
         }
 
         List<Hat> hats = generateEnemyHats();
-        EnemyEntity ee = new EnemyEntity(initialX, initialY, bounds,
-                hats, mPlayer);
+        EnemyEntity ee = new EnemyEntity(initialX, initialY, bounds, hats,
+                mPlayer);
         mUpdateables.addAll(hats);
         mDrawables.addAll(hats);
         mEnemyEntities.add(ee);
@@ -133,28 +133,31 @@ public class GameRoot implements ApplicationListener {
         mDrawables.add(ee);
     }
 
-	private List<Hat> generateEnemyHats() {
-		float totalProbability = 0;
+    private List<Hat> generateEnemyHats() {
+        float totalProbability = 0;
 
-		for (String et : ENEMY_TYPES) {
-			totalProbability += constants().getFloat(et + "_npc_probability");
-		}
-		
-		float actualProbability = services().random().nextFloat() * totalProbability;
-		int i = -1;
-		while (actualProbability > 0) {
-			actualProbability -= constants().getFloat(ENEMY_TYPES[i+1] + "_npc_probability");
-			i++;
-		}
-		
-		String enemyType = ENEMY_TYPES[i];
-		int minHatCount = constants().getInt(enemyType + "_npc_hat_min");
-		int maxHatCount = constants().getInt(enemyType + "_npc_hat_max");
-		int nHats = services().random().nextInt(maxHatCount - minHatCount) + minHatCount;
-		HatGenerator hg = services().hatGenerator();
+        for (String et : ENEMY_TYPES) {
+            totalProbability += constants().getFloat(et + "_npc_probability");
+        }
+
+        float actualProbability = services().random().nextFloat()
+                * totalProbability;
+        int i = -1;
+        while (actualProbability > 0) {
+            actualProbability -= constants().getFloat(
+                    ENEMY_TYPES[i + 1] + "_npc_probability");
+            i++;
+        }
+
+        String enemyType = ENEMY_TYPES[i];
+        int minHatCount = constants().getInt(enemyType + "_npc_hat_min");
+        int maxHatCount = constants().getInt(enemyType + "_npc_hat_max");
+        int nHats = services().random().nextInt(maxHatCount - minHatCount)
+                + minHatCount;
+        HatGenerator hg = services().hatGenerator();
         List<Hat> hats = hg.generateHats(nHats);
-		return hats;
-	}
+        return hats;
+    }
 
     private Random random() {
         return services().random();
@@ -173,63 +176,63 @@ public class GameRoot implements ApplicationListener {
 
     @Override
     public void render() {
-    	handlePauseInput();
-    	switch (mState) {
-    	case MAIN_MENU:
-    		if (Gdx.input.isKeyPressed(Keys.SPACE)) {
-    			mState = GameState.RUN;
-    		} else {
-    			clear();
-    			drawMainMenu();
-    			break;
-    		}
-    	case RUN:
+        handlePauseInput();
+        switch (mState) {
+        case MAIN_MENU:
+            if (Gdx.input.isKeyPressed(Keys.SPACE)) {
+                mState = GameState.RUN;
+            } else {
+                clear();
+                drawMainMenu();
+                break;
+            }
+        case RUN:
             updateMain();
-    	case PAUSED:
-    		clear();
-    		drawMain();
-    		break;
-    	case GAME_OVER:
-        	if (Gdx.input.isKeyPressed(Keys.SPACE)) {
-        		create();
-        	}
-        	clear();
-        	drawGameOver();
-        	break;
-    	}
+        case PAUSED:
+            clear();
+            drawMain();
+            break;
+        case GAME_OVER:
+            if (Gdx.input.isKeyPressed(Keys.SPACE)) {
+                create();
+            }
+            clear();
+            drawGameOver();
+            break;
+        }
     }
 
     private void handlePauseInput() {
-    	if (Gdx.input.isKeyPressed(Keys.ESCAPE)) {
-    		switch (mState) {
-    		case GAME_OVER:
-    			Gdx.app.exit();
-    			break;
-    		case MAIN_MENU:
-    			break;
-    		case PAUSED:
-    			mState = GameState.RUN;
-    			break;
-    		case RUN:
-    			mState = GameState.PAUSED;
-    			break;
-    		}
-    	}
-	}
+        if (Gdx.input.isKeyPressed(Keys.ESCAPE)) {
+            switch (mState) {
+            case GAME_OVER:
+                Gdx.app.exit();
+                break;
+            case MAIN_MENU:
+                break;
+            case PAUSED:
+                mState = GameState.RUN;
+                break;
+            case RUN:
+                mState = GameState.PAUSED;
+                break;
+            }
+        }
+    }
 
-	private void drawMainMenu() {
-		uiSpriteBatch().begin();
-		mMainMenuSprite.draw(uiSpriteBatch());
-		uiSpriteBatch().end();
-	}
+    private void drawMainMenu() {
+        uiSpriteBatch().begin();
+        mMainMenuSprite.draw(uiSpriteBatch());
+        uiSpriteBatch().end();
+    }
 
-	private void drawGameOver() {
-    	uiSpriteBatch().begin();
-    	mGameOverSprite.draw(uiSpriteBatch());
-    	uiSpriteBatch().end();
-	}
+    private void drawGameOver() {
+        uiSpriteBatch().begin();
+        mGameOverSprite.draw(uiSpriteBatch());
+        uiSpriteBatch().end();
+    }
 
-	private void updateMain() {
+    private void updateMain() {
         stepPhysics();
         dropAllHats();
 
@@ -240,24 +243,26 @@ public class GameRoot implements ApplicationListener {
         removeDeadEnemies();
         boolean comboResult = mComboHandler.tick();
         if (comboResult == false) {
-        	mState = GameState.GAME_OVER;
+            mState = GameState.GAME_OVER;
         }
 
         Vector2 playerPosition = mPlayer.position();
         float cameraX = playerPosition.x, cameraY = playerPosition.y;
-        float cameraBoundX = sServices.constantManager().getFloat("camera_bound_x");
-        float cameraBoundY = sServices.constantManager().getFloat("camera_bound_y");
+        float cameraBoundX = sServices.constantManager().getFloat(
+                "camera_bound_x");
+        float cameraBoundY = sServices.constantManager().getFloat(
+                "camera_bound_y");
         if (cameraX < -cameraBoundX) {
-        	cameraX = -cameraBoundX;
+            cameraX = -cameraBoundX;
         }
         if (cameraY < -cameraBoundY) {
-        	cameraY = -cameraBoundY;
+            cameraY = -cameraBoundY;
         }
         if (cameraX > cameraBoundX) {
-        	cameraX = cameraBoundX;
+            cameraX = cameraBoundX;
         }
         if (cameraY > cameraBoundY) {
-        	cameraY = cameraBoundY;
+            cameraY = cameraBoundY;
         }
         camera().position.x = cameraX;
         camera().position.y = cameraY;
@@ -287,34 +292,42 @@ public class GameRoot implements ApplicationListener {
     private void stepPhysics() {
         services().world().step((float) (60 / 1000.0), 3, 3);
     }
-    
+
     private boolean mAllowSinglePop = true;
     private float mTimeSinceSpace = 0;
 
     private void dropAllHats() {
-    	mTimeSinceSpace++;
-    	if (mTimeSinceSpace > 30) {
-    		mAllowSinglePop = true;
-    	}
+        mTimeSinceSpace++;
+        if (mTimeSinceSpace > 30) {
+            mAllowSinglePop = true;
+        }
         if (Gdx.input.isKeyPressed(Keys.SPACE)) {
-        	List<Hat> playersHats;
+            List<Hat> playersHats;
 
-        	if (services().constantManager().getBoolean("drop_single_hat")) {
-        		playersHats = new ArrayList<Hat>();
-        		if (mPlayer.hatCount() > 0 && mAllowSinglePop) {
-        			mAllowSinglePop = false;
-        			mTimeSinceSpace = 0;
-        			playersHats.add(mPlayer.getHats().pop());
-        		}
-        	} else {
-        		playersHats = mPlayer.popAllHats();
-        	}
+            if (services().constantManager().getBoolean("drop_single_hat")) {
+                playersHats = new ArrayList<Hat>();
+                if (mPlayer.hatCount() > 0 && mAllowSinglePop) {
+                    services().soundManager().play("hats1");
+                    mAllowSinglePop = false;
+                    playersHats.add(mPlayer.getHats().pop());
+                    new Timer().schedule(new TimerTask() {
 
-        	for (Hat h : playersHats) {
-        		h.setLoose();
-        	}
-        	
-        	services().hatDistributor().distributeHats(playersHats, mPlayer.position().x, mPlayer.position().y);
+                        @Override
+                        public void run() {
+                            mAllowSinglePop = true;
+                        }
+                    }, 500);
+                }
+            } else {
+                playersHats = mPlayer.popAllHats();
+            }
+
+            for (Hat h : playersHats) {
+                h.setLoose();
+            }
+
+            services().hatDistributor().distributeHats(playersHats,
+                    mPlayer.position().x, mPlayer.position().y);
         }
     }
 
@@ -332,29 +345,26 @@ public class GameRoot implements ApplicationListener {
         }
         mainSpriteBatch().end();
         drawDebugPhysics();
-        
+
         uiSpriteBatch().begin();
         mComboHandler.draw(uiSpriteBatch());
         services().scoreBoard().draw(uiSpriteBatch());
-        
         String s = mPlayer.getHats().size() + "/10";
         mFont.draw(uiSpriteBatch(), s, 690, 570);
         mHatSprite.setPosition(620, 570-mHatSprite.getHeight()/2);
         mHatSprite.draw(uiSpriteBatch());
-        
         uiSpriteBatch().end();
-        
     }
 
-	private void drawDebugPhysics() {
-		if (services().constantManager().getBoolean("debug_physics")) {
+    private void drawDebugPhysics() {
+        if (services().constantManager().getBoolean("debug_physics")) {
             mDebugRenderer.render(
                     services().world(),
                     services().camera().combined.cpy().scale(
                             GameServices.PIXELS_PER_METER,
                             GameServices.PIXELS_PER_METER, 1));
         }
-	}
+    }
 
     @Override
     public void resize(int width, int height) {
@@ -396,8 +406,8 @@ public class GameRoot implements ApplicationListener {
         HatDistributor hd = services().hatDistributor();
         HatGenerator hg = services().hatGenerator();
 
-        for (Hat h : hd.distributeHats(hg.generateHats(constants().getInt(
-                "initial_hats")), 0, 0)) {
+        for (Hat h : hd.distributeHats(
+                hg.generateHats(constants().getInt("initial_hats")), 0, 0)) {
             mDrawables.add(h);
             mUpdateables.add(h);
         }
