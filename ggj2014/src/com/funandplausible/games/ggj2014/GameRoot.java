@@ -225,25 +225,6 @@ public class GameRoot implements ApplicationListener {
     }
 
     private void handlePauseInput() {
-        if (Gdx.input.isKeyPressed(Keys.ESCAPE)) {
-            switch (mState) {
-            case GAME_OVER:
-                Gdx.app.exit();
-                break;
-            case MAIN_MENU:
-                break;
-            case PAUSED:
-                mState = GameState.RUN;
-                break;
-            case RUN:
-                mState = GameState.PAUSED;
-                break;
-			case INSTRUCTIONS:
-				break;
-			default:
-				break;
-            }
-        }
     }
 
     private void drawMainMenu() {
