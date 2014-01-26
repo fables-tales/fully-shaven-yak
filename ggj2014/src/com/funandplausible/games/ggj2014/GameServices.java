@@ -21,6 +21,7 @@ public class GameServices {
     private final HatDistributor mHatDistributor;
     private final HatGenerator mHatGenerator;
     private final ScoreBoard mScoreBoard;
+    private final SoundManager mSoundManager;
 
     public static final Vector2 GRAVITY_VECTOR = new Vector2(0.0f, 0.0f);
     public static final float PIXELS_PER_METER = 32;
@@ -37,6 +38,11 @@ public class GameServices {
         mHatDistributor = makeHatDistributor();
         mScoreBoard = makeScoreBoard();
         mHatGenerator = makeHatGenerator();
+        mSoundManager = makeSoundManager();
+    }
+
+    private SoundManager makeSoundManager() {
+        return new SoundManager();
     }
 
     private HatGenerator makeHatGenerator() {
@@ -129,5 +135,9 @@ public class GameServices {
 
     public SpriteBatch uiSpriteBatch() {
         return mUISpriteBatch;
+    }
+
+    public SoundManager soundManager() {
+        return mSoundManager;
     }
 }
