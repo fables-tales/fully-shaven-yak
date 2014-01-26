@@ -1,6 +1,6 @@
 name|type|value
 debug_physics|bool|false
-player_speed|float|3.0
+player_speed|float|2.0
 hat_spawn_size|float|1500
 initial_hats|int|20
 n_enemies|int|15
