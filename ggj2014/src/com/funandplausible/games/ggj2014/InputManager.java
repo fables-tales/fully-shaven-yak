@@ -12,22 +12,38 @@ public class InputManager {
     }
 
     private float computeYInput() {
-        if (Gdx.input.isKeyPressed(Keys.S)) {
+        if (goDown()) {
             return -1;
-        } else if (Gdx.input.isKeyPressed(Keys.W)) {
+        } else if (goUp()) {
             return 1;
         } else {
             return 0;
         }
     }
 
+	private boolean goUp() {
+		return Gdx.input.isKeyPressed(Keys.W) || Gdx.input.isKeyPressed(Keys.UP);
+	}
+
+	private boolean goDown() {
+		return Gdx.input.isKeyPressed(Keys.S) || Gdx.input.isKeyPressed(Keys.DOWN);
+	}
+
     private float computeXInput() {
-        if (Gdx.input.isKeyPressed(Keys.A)) {
+        if (goLeft()) {
             return -1;
-        } else if (Gdx.input.isKeyPressed(Keys.D)) {
+        } else if (goRight()) {
             return 1;
         } else {
             return 0;
         }
     }
+
+	private boolean goRight() {
+		return Gdx.input.isKeyPressed(Keys.D) || Gdx.input.isKeyPressed(Keys.RIGHT);
+	}
+
+	private boolean goLeft() {
+		return Gdx.input.isKeyPressed(Keys.A) || Gdx.input.isKeyPressed(Keys.LEFT);
+	}
 }
