@@ -26,8 +26,6 @@ import com.funandplausible.games.ggj2014.drawables.SpriteDrawable;
 public class GameRoot implements ApplicationListener {
 
     private static GameServices sServices;
-    private static final int STATE_MAIN = 0x01;
-	private static final int STATE_GAME_OVER = 0x02;
     private static final String[] ENEMY_TYPES = new String[] { "low_hat", "med_hat", "high_hat" };
     
     private String mConstantsText;
@@ -42,7 +40,7 @@ public class GameRoot implements ApplicationListener {
 
     private List<Drawable> mDrawables;
     private Set<Updateable> mUpdateables;
-    private int mState;
+    private GameState mState;
     private Box2DDebugRenderer mDebugRenderer;
     private PlayerEntity mPlayer;
     private List<EnemyEntity> mEnemyEntities;
@@ -59,7 +57,7 @@ public class GameRoot implements ApplicationListener {
         mNEnemies = constants().getInt("n_enemies");
         mGameOverSprite = services().contentManager().loadSprite("lose.png");
 
-        mState = STATE_MAIN;
+        mState = GameState.RUN;
 
         createPlayer();
         createBackground();
@@ -160,16 +158,19 @@ public class GameRoot implements ApplicationListener {
 
     @Override
     public void render() {
-        if (mState == STATE_MAIN) {
+    	switch (mState) {
+    	case RUN:
             updateMain();
             clear();
             drawMain();
-        } else if (mState == STATE_GAME_OVER) {
+            break;
+    	case GAME_OVER:
         	if (Gdx.input.isKeyPressed(Keys.R)) {
         		create();
         	}
         	clear();
         	drawGameOver();
+        	break;
         }
     }
 
@@ -190,7 +191,7 @@ public class GameRoot implements ApplicationListener {
         removeDeadEnemies();
         boolean comboResult = mComboHandler.tick();
         if (comboResult == false) {
-        	mState = STATE_GAME_OVER;
+        	mState = GameState.GAME_OVER;
         }
 
         Vector2 playerPosition = mPlayer.position();
