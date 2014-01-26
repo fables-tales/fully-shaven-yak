@@ -238,6 +238,10 @@ public class GameRoot implements ApplicationListener {
             case RUN:
                 mState = GameState.PAUSED;
                 break;
+			case INSTRUCTIONS:
+				break;
+			default:
+				break;
             }
         }
     }
@@ -323,7 +327,7 @@ public class GameRoot implements ApplicationListener {
         if (mTimeSinceSpace > 30) {
             mAllowSinglePop = true;
         }
-        if (Gdx.input.isKeyPressed(Keys.SPACE)) {
+        if (Gdx.input.isKeyPressed(Keys.SPACE) && mTimeSinceSpace > 35) {
             List<Hat> playersHats;
 
             if (services().constantManager().getBoolean("drop_single_hat")) {
