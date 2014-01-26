@@ -57,8 +57,12 @@ public class GameRoot implements ApplicationListener {
         mNEnemies = constants().getInt("n_enemies");
         mGameOverSprite = services().contentManager().loadSprite("lose.png");
 
-        mState = GameState.RUN;
-
+        if (constants().getBoolean("no_start_screen")) {
+        	mState = GameState.RUN;
+        } else {
+        	mState = GameState.MAIN_MENU;
+        }
+        	
         createPlayer();
         createBackground();
 
@@ -159,6 +163,14 @@ public class GameRoot implements ApplicationListener {
     @Override
     public void render() {
     	switch (mState) {
+    	case MAIN_MENU:
+    		if (Gdx.input.isKeyPressed(Keys.SPACE)) {
+    			mState = GameState.RUN;
+    		} else {
+    			clear();
+    			drawMainMenu();
+    			break;
+    		}
     	case RUN:
             updateMain();
             clear();
@@ -171,10 +183,14 @@ public class GameRoot implements ApplicationListener {
         	clear();
         	drawGameOver();
         	break;
-        }
+    	}
     }
 
-    private void drawGameOver() {
+    private void drawMainMenu() {
+		// TODO Fill me in
+	}
+
+	private void drawGameOver() {
     	uiSpriteBatch().begin();
     	mGameOverSprite.draw(uiSpriteBatch());
     	uiSpriteBatch().end();
