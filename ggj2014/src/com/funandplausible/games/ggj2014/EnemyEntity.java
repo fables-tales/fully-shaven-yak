@@ -21,7 +21,7 @@ import com.funandplausible.games.ggj2014.drawables.SpriteDrawable;
 
 public class EnemyEntity extends Drawable implements Updateable, HatInteractor,
         HatCollector {
-	private static final float COLOR_DECAY = 0.9999f;
+    private static final float COLOR_DECAY = 0.9999f;
     private PhysicsSprite mSprite;
     private final Stack<Hat> mHats;
     private boolean mDead = false;
@@ -57,7 +57,7 @@ public class EnemyEntity extends Drawable implements Updateable, HatInteractor,
         List<Sprite> frames = new ArrayList<Sprite>();
         for (int i = start_frame; i < end_frame; i++) {
             Sprite s = GameRoot.services().contentManager()
-                    .loadSprite(string + "_" + i + ".png");
+                    .loadPackedSprite(string + i);
             s.setBounds(0, 0, 75 / 1.844f, 75);
             frames.add(s);
         }
@@ -94,16 +94,19 @@ public class EnemyEntity extends Drawable implements Updateable, HatInteractor,
         ballFixture.setUserData(this);
         ballBody.setUserData(this);
 
-        Sprite s = GameRoot.services().contentManager().loadSprite("bees.png");
-        s.setBounds(0, 0, 75, 75*1.844f);
+        Sprite s = GameRoot.services().contentManager()
+                .loadPackedSprite("hat0");
+        s.setBounds(0, 0, 75, 75 * 1.844f);
         s.setColor(1.0f, 0.0f, 1.0f, 1.0f);
         SpriteDrawable sd = new SpriteDrawable(s, 200);
         mSprite = new PhysicsSprite(sd, ballBody, ballFixture);
         mGDXSprite = s;
-        
-        mBadSprite = GameRoot.services().contentManager().loadSprite("ruffian.png");
+
+        mBadSprite = GameRoot.services().contentManager()
+                .loadPackedSprite("ruffian");
         mBadSprite.setColor(1.0f, 1.0f, 1.0f, 0.0f);
-        mGoodSprite = GameRoot.services().contentManager().loadSprite("good_show.png");
+        mGoodSprite = GameRoot.services().contentManager()
+                .loadPackedSprite("good_show");
         mGoodSprite.setColor(1.0f, 1.0f, 1.0f, 0.0f);
     }
 
@@ -117,25 +120,24 @@ public class EnemyEntity extends Drawable implements Updateable, HatInteractor,
         }
 
         Vector2 vel = mSprite.body().getLinearVelocity();
-        
-        if (Math.abs(vel.x) < Math.abs(vel.y)) {
-        	if (vel.y < 0) {
-        		mAnim = "walk_down_bad";
-        	} else if (vel.y > 0) {
-        		mAnim = "walk_up_bad";
-        	} else {
-        		mAnim = "walk_down_bad";
-        	}
-        } else {
-        	if (vel.x < 0) {
-        		mAnim = "walk_left_bad";
-        	} else if (vel.x > 0) {
-        		mAnim = "walk_right_bad";
-        	} else {
-        		mAnim = "walk_left_bad";
-        	}
-        }
 
+        if (Math.abs(vel.x) < Math.abs(vel.y)) {
+            if (vel.y < 0) {
+                mAnim = "walk_down_bad";
+            } else if (vel.y > 0) {
+                mAnim = "walk_up_bad";
+            } else {
+                mAnim = "walk_down_bad";
+            }
+        } else {
+            if (vel.x < 0) {
+                mAnim = "walk_left_bad";
+            } else if (vel.x > 0) {
+                mAnim = "walk_right_bad";
+            } else {
+                mAnim = "walk_left_bad";
+            }
+        }
 
         mAnimationManager.startAnimation(mAnim);
 
@@ -166,20 +168,20 @@ public class EnemyEntity extends Drawable implements Updateable, HatInteractor,
     }
 
     private float distributedValue(Random rng) {
-		float basis = (float) (rng.nextGaussian() * 0.5);
-		if (basis < -1.0f) {
-			basis = -1.0f;
-		} else if (basis > 1.0f) {
-			basis = 1.0f;
-		}
-		if (basis < 0.0f) {
-			return -1.0f - basis;
-		} else {
-			return 1.0f - basis;
-		}
-	}
+        float basis = (float) (rng.nextGaussian() * 0.5);
+        if (basis < -1.0f) {
+            basis = -1.0f;
+        } else if (basis > 1.0f) {
+            basis = 1.0f;
+        }
+        if (basis < 0.0f) {
+            return -1.0f - basis;
+        } else {
+            return 1.0f - basis;
+        }
+    }
 
-	private float centerX() {
+    private float centerX() {
         return mSprite.position().x;
     }
 
@@ -196,23 +198,23 @@ public class EnemyEntity extends Drawable implements Updateable, HatInteractor,
     public void draw(SpriteBatch sb) {
         Sprite sprite = mAnimationManager.nextFrame();
         if (sprite == null) {
-        	mAnimationManager.startAnimation("walk_left_bad");
-        	sprite = mAnimationManager.nextFrame();
+            mAnimationManager.startAnimation("walk_left_bad");
+            sprite = mAnimationManager.nextFrame();
         }
         sprite.setPosition(mSprite.position().x - 75 / (2 * 1.844f),
                 mSprite.position().y - 75 / 2);
         sprite.setColor(playerHatDeltaColor());
         sprite.draw(sb);
         if (mBadSprite.getColor().a > 0) {
-        	blendBadSprite();
-        	mBadSprite.setPosition(mSprite.position().x, mSprite.position().y);
-        	mBadSprite.draw(sb);
+            blendBadSprite();
+            mBadSprite.setPosition(mSprite.position().x, mSprite.position().y);
+            mBadSprite.draw(sb);
         }
 
         if (mGoodSprite.getColor().a > 0) {
-        	blendGoodSprite();
-        	mGoodSprite.setPosition(mSprite.position().x, mSprite.position().y);
-        	mGoodSprite.draw(sb);
+            blendGoodSprite();
+            mGoodSprite.setPosition(mSprite.position().x, mSprite.position().y);
+            mGoodSprite.draw(sb);
         }
     }
 
@@ -243,25 +245,25 @@ public class EnemyEntity extends Drawable implements Updateable, HatInteractor,
 
     @Override
     public void loseInteraction(HatInteractor other) {
-    	showGoodSpriteForNFrames(60);
+        showGoodSpriteForNFrames(60);
     }
-    
+
     int mFramesRemaining, mStartFrames;
 
     private void showGoodSpriteForNFrames(int i) {
-    	mBadSprite.setColor(1.0f, 1.0f, 1.0f, 0.0f);
-    	mGoodSprite.setColor(1.0f, 1.0f, 1.0f, 1.0f);
-    	mStartFrames = i;
-    	mFramesRemaining = i;
-    	blendGoodSprite();
-	}
+        mBadSprite.setColor(1.0f, 1.0f, 1.0f, 0.0f);
+        mGoodSprite.setColor(1.0f, 1.0f, 1.0f, 1.0f);
+        mStartFrames = i;
+        mFramesRemaining = i;
+        blendGoodSprite();
+    }
 
-	private void blendGoodSprite() {
-		float currentAlpha = mGoodSprite.getColor().a;
-		mGoodSprite.setColor(1.0f, 1.0f, 1.0f, currentAlpha*COLOR_DECAY);
-	}
+    private void blendGoodSprite() {
+        float currentAlpha = mGoodSprite.getColor().a;
+        mGoodSprite.setColor(1.0f, 1.0f, 1.0f, currentAlpha * COLOR_DECAY);
+    }
 
-	private void die() {
+    private void die() {
         mDead = true;
     }
 
@@ -271,24 +273,24 @@ public class EnemyEntity extends Drawable implements Updateable, HatInteractor,
 
     @Override
     public void winInteraction(HatInteractor other) {
-    	showBadSpriteForNFrames(60);
+        showBadSpriteForNFrames(60);
         if (other.hatCount() > 0) {
             mHats.push(other.getHats().pop());
         }
     }
-    
-    private void showBadSpriteForNFrames(int i) {
-    	mGoodSprite.setColor(1.0f, 1.0f, 1.0f, 0.0f);
-    	mBadSprite.setColor(1.0f, 1.0f, 1.0f, 1.0f);
-    	mStartFrames = i;
-    	mFramesRemaining = i;
-    	blendBadSprite();
-	}
 
-	private void blendBadSprite() {
-		float currentAlpha = mBadSprite.getColor().a;
-		mBadSprite.setColor(1.0f, 1.0f, 1.0f, currentAlpha*COLOR_DECAY);
-	}
+    private void showBadSpriteForNFrames(int i) {
+        mGoodSprite.setColor(1.0f, 1.0f, 1.0f, 0.0f);
+        mBadSprite.setColor(1.0f, 1.0f, 1.0f, 1.0f);
+        mStartFrames = i;
+        mFramesRemaining = i;
+        blendBadSprite();
+    }
+
+    private void blendBadSprite() {
+        float currentAlpha = mBadSprite.getColor().a;
+        mBadSprite.setColor(1.0f, 1.0f, 1.0f, currentAlpha * COLOR_DECAY);
+    }
 
     @Override
     public boolean isNPC() {

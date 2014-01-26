@@ -6,8 +6,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
@@ -48,11 +46,11 @@ public class GameRoot implements ApplicationListener {
     private PlayerEntity mPlayer;
     private List<EnemyEntity> mEnemyEntities;
     private int mNEnemies;
-	private ComboHandler mComboHandler;
-	private Sprite mGameOverSprite;
-	private BitmapFont mFont;
-	private Sprite mMainMenuSprite;
-	private Sprite mHatSprite;
+    private ComboHandler mComboHandler;
+    private Sprite mGameOverSprite;
+    private BitmapFont mFont;
+    private Sprite mMainMenuSprite;
+    private Sprite mHatSprite;
 
     @Override
     public void create() {
@@ -61,12 +59,13 @@ public class GameRoot implements ApplicationListener {
         mUpdateables = new HashSet<Updateable>();
         mEnemyEntities = new ArrayList<EnemyEntity>();
         mNEnemies = constants().getInt("n_enemies");
-        mGameOverSprite = services().contentManager().loadSprite("lose.png");
-        mMainMenuSprite = services().contentManager().loadSprite("mainmenu.png");
-        mHatSprite = services().contentManager().loadSprite("hat1.png");
+        mGameOverSprite = services().contentManager().loadPackedSprite("lose");
+        mMainMenuSprite = services().contentManager().loadPackedSprite(
+                "mainmenu");
+        mHatSprite = services().contentManager().loadPackedSprite("hat1");
         mHatSprite.setColor(Color.BLACK);
         mHatSprite.setBounds(0, 0, 50, 50);
-    	mFont = new BitmapFont(Content.file("calibri.fnt"));
+        mFont = new BitmapFont(Content.file("calibri.fnt"));
 
         if (constants().getBoolean("no_start_screen")) {
             mState = GameState.RUN;
@@ -331,7 +330,8 @@ public class GameRoot implements ApplicationListener {
     }
 
     private void drawMain() {
-        mainSpriteBatch().setProjectionMatrix(cameraMatrix().scale(1.5f, 1.5f, 1));
+        mainSpriteBatch().setProjectionMatrix(
+                cameraMatrix().scale(1.5f, 1.5f, 1));
         mainSpriteBatch().begin();
         Collections.sort(mDrawables);
         for (Drawable d : mDrawables) {
@@ -346,7 +346,7 @@ public class GameRoot implements ApplicationListener {
         int maxHatCount = services().constantManager().getInt("max_hats");
         String s = mPlayer.getHats().size() + "/" + maxHatCount;
         mFont.draw(uiSpriteBatch(), s, 690, 570);
-        mHatSprite.setPosition(620, 570-mHatSprite.getHeight()/2);
+        mHatSprite.setPosition(620, 570 - mHatSprite.getHeight() / 2);
         mHatSprite.draw(uiSpriteBatch());
         uiSpriteBatch().end();
     }
@@ -391,7 +391,7 @@ public class GameRoot implements ApplicationListener {
 
     private void createBackground() {
         SpriteDrawable sd = new SpriteDrawable(services().contentManager()
-                .loadSprite("marble.png"), -1000);
+                .loadPlainSprite("marble.png"), -1000);
         float bound = services().constantManager().getFloat("enemy_bounds");
         sd.setPosition(-bound, -bound);
         mDrawables.add(sd);
