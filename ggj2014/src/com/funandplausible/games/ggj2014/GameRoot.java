@@ -349,7 +349,8 @@ public class GameRoot implements ApplicationListener {
         uiSpriteBatch().begin();
         mComboHandler.draw(uiSpriteBatch());
         services().scoreBoard().draw(uiSpriteBatch());
-        String s = mPlayer.getHats().size() + "/10";
+        int maxHatCount = services().constantManager().getInt("max_hats");
+        String s = mPlayer.getHats().size() + "/" + maxHatCount;
         mFont.draw(uiSpriteBatch(), s, 690, 570);
         mHatSprite.setPosition(620, 570-mHatSprite.getHeight()/2);
         mHatSprite.draw(uiSpriteBatch());

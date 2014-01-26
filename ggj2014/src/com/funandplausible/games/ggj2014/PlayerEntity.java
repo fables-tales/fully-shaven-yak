@@ -23,8 +23,10 @@ public class PlayerEntity extends Drawable implements Updateable,
     private final float mPlayerSpeed;
     private final Stack<Hat> mHats = new Stack<Hat>();
     private final AnimationManager mAnimationManager;
+    private final int mMaxHatCount;
 
     public PlayerEntity() {
+    	mMaxHatCount = GameRoot.services().constantManager().getInt("max_hats");
         // Define a body for the ball
         Body ballBody;
 
@@ -164,7 +166,7 @@ public class PlayerEntity extends Drawable implements Updateable,
 
     @Override
     public void winInteraction(HatInteractor other) {
-        if (other.hatCount() > 0 && mHats.size() < 10) {
+        if (other.hatCount() > 0 && mHats.size() < mMaxHatCount) {
             mHats.add(other.getHats().pop());
         }
     }
@@ -176,7 +178,7 @@ public class PlayerEntity extends Drawable implements Updateable,
 
     @Override
     public void receiveHat(Hat hat) {
-        if (hatCount() < 10) {
+        if (hatCount() < mMaxHatCount) {
             pushHat(hat);
         }
     }
